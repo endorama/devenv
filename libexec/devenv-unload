@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Usage: devenv load <name>
+# Summary: Load a profile by name
+# Help: This command can load specific files/env specified inside a profile.
+# This command will output the required export to setup the current shell, will
+# not perform any action. To make it effective, use $(devenv load profile).
+# This is a safety mechanism, plus help with debugging. Always run it easy 
+# first :)
+#
+# The profile is a folder which can contain:
+# - 'envs' file, which should be composed of environment variable and values 
+#   separated by =.
+#   Empty lines or line starting with # are ignored.
+#   An empty line and the end of the file is MANDATORY.
+# - 'ssh' folder, which should contain all files normally inside $HOME/.ssh
+#   Please note that $HOME/.ssh will be DESTROYED.
+
+set -e
+
+source $_DEVENV_ROOT/libs/ui.sh
+source $_DEVENV_ROOT/libs/profile.sh
+
+active_profile=$(get_active_profile)
+
+if [[ $active_profile != "" ]]; then
+  e_message "Unloading $active_profile"
+  kill -SIGKILL $PPID > /dev/null
+fi
+
+# echo "# END"

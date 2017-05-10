@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Usage: devenv list
+# Summary: List available profiles
+
+set -e
+
+source $_DEVENV_ROOT/libs/ui.sh
+source $_DEVENV_ROOT/libs/profile.sh
+
+PROFILE_PATHS="$_DEVENV_ROOT/profiles"
+
+is_active() {
+  local profile
+  local active_profile
+  profile=$1
+  active_profile="$(get_active_profile)"
+  # echo $active_profile
+  if [ "$profile" == "$active_profile" ]; then
+    echo "yes"
+  else
+    echo "no"
+  fi
+}
+
+profiles=$(ls -d $PROFILE_PATHS/*)
+for profile in $profiles; do
+  #is_active $profile
+  profile=$(basename $profile)
+  if [[ $profile != "active_profile" && $profile != "shared" ]]; then
+    if [[ $(is_active $profile) == "yes" ]]; then
+      e_message '* '"$(basename $profile)"
+    else
+      e_message '  '"$(basename $profile)"
+    fi
+  fi
+done
+
+# echo "# END"
