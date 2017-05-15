@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+
+source $_DEVENV_ROOT/libs/ui.sh
+source $_DEVENV_ROOT/libs/config.sh
+source $_DEVENV_ROOT/libs/profile.sh
+
+[ $# -eq 0 ] && e_abort "required argument: profile name"
+
+profile=$1
+profile_load_file="$(get_config "profiles")/$profile/load.sh"
+
+if [ -e $profile_load_file ]; then
+  $profile_load_file
+else
+  devenv rehash $profile
+  $profile_load_file
+fi
+
+# echo "# END"
