@@ -52,12 +52,21 @@ profile_load_envs() {
 profile_load_ssh() {
   local profile_folder
   profile_folder=$1
+  local profile
+  profile=$2
   local folder
   folder="$profile_folder/ssh"
 
+  echo "if [ ! -f /tmp/$profile-ssh-agent.tmp ]; then"
+    echo "echo \$(ssh-agent -s | sed \"s/echo/# echo/\") > /tmp/$profile-ssh-agent.tmp"
+    echo "chown $USER:$USER; chmod 700 $USER"
+  echo "fi"
+  echo "source /tmp/$profile-ssh-agent.tmp"
+
   if [ -d $folder ]; then
-    if [ $SSH_AGENT_PID != "" ]; then
-      [ -e "$folder/id_rsa" ] && echo "ssh-add $folder/id_rsa"
+    if [ -e "$folder/id_rsa" ]; then
+      echo "ssh-add -l > /dev/null | grep $folder/id_rsa"
+      echo "[ \$? -gt 0 ] && ssh-add $folder/id_rsa > /dev/null"
     fi
 
     echo -n "/usr/bin/ssh " > $profile_folder/bin/ssh
@@ -66,8 +75,6 @@ profile_load_ssh() {
     [ -e "$folder/config" ] && echo -n "-F $folder/config " >> $profile_folder/bin/ssh
     echo "\$@" >> $profile_folder/bin/ssh
   fi
-
-  
 
   return 0
 }
@@ -92,7 +99,7 @@ profile_generate_loader() {
 
   profile_prepare_bin_folder $profile_folder
   profile_load_envs $profile_folder
-  profile_load_ssh $profile_folder
+  profile_load_ssh $profile_folder $profile
   profile_export_path $profile_folder
 
   echo "$SHELL -l" 
