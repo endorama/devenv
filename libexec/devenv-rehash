@@ -15,6 +15,7 @@ profile=$1
 profile_exists $profile || e_abort "profile does not exists" 127
 
 profile_load_file="$(get_config "profiles")/$profile/load.sh"
+profile_run_file="$(get_config "profiles")/$profile/run.sh"
 
 profile_loader=$(profile_generate_loader $profile)
 
@@ -24,4 +25,7 @@ echo 'export LP_PS1_PREFIX="$DEVENV_ACTIVE_PROFILE $LP_PS1_PREFIX"'  >> $profile
 echo "$SHELL -l"  >> $profile_load_file
 chmod 700 $profile_load_file
 
-chmod 700 $profile_load_file
+# double quotes are mandatory
+echo "$profile_loader" > $profile_run_file
+echo "eval \$@" >> $profile_run_file
+chmod 700 $profile_run_file

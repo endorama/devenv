@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Usage: devenv rehash
+# Summary: Run a one-off command in the specified environment
+
+set -e
+
+# source $_DEVENV_ROOT/libs/vars.sh
+source $_DEVENV_ROOT/libs/ui.sh
+source $_DEVENV_ROOT/libs/profile.sh
+source $_DEVENV_ROOT/libs/config.sh
+
+profile=$1
+shift 1
+profile_run_file="$(get_config "profiles")/$profile/run.sh"
+
+exec $profile_run_file $*
