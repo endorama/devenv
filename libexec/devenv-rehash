@@ -20,5 +20,8 @@ profile_loader=$(profile_generate_loader $profile)
 
 # double quotes are mandatory
 echo "$profile_loader" > $profile_load_file
+echo 'export LP_PS1_PREFIX="$DEVENV_ACTIVE_PROFILE $LP_PS1_PREFIX"'  >> $profile_load_file
+echo "$SHELL -l"  >> $profile_load_file
+chmod 700 $profile_load_file
 
 chmod 700 $profile_load_file

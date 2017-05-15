@@ -91,16 +91,12 @@ profile_generate_loader() {
   local profile_folder
   profile_folder="$(get_config "profiles")/$profile"
 
-
-  echo "#!/bin/bash" 
+  echo "#!$SHELL" 
   echo "#" 
   echo "" 
   echo "export DEVENV_ACTIVE_PROFILE=$profile" 
-
   profile_prepare_bin_folder $profile_folder
   profile_load_envs $profile_folder
   profile_load_ssh $profile_folder $profile
   profile_export_path $profile_folder
-
-  echo "$SHELL -l" 
 }
