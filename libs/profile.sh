@@ -79,6 +79,7 @@ profile_load_ssh() {
     [ -e "$folder/known_hosts" ] && echo -n "-o UserKnownHostsFile=$folder/known_hosts " >> $profile_folder/bin/ssh
     [ -e "$folder/config" ] && echo -n "-F $folder/config " >> $profile_folder/bin/ssh
     echo "\$@" >> $profile_folder/bin/ssh
+    chmod +x $profile_folder/bin/ssh
   fi
 
   return 0
