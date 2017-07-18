@@ -66,13 +66,16 @@ profile_load_ssh() {
   echo "source $ssh_agent_cache"
 
   if [ -d $folder ]; then
-    if [ -e "$folder/id_rsa" ]; then
-      echo "ssh-add -l > /dev/null | grep $folder/id_rsa"
-      echo "[ \$? -gt 0 ] && ssh-add $folder/id_rsa > /dev/null"
-    fi
+    for file in $folder/*.pub; do
+      echo "ssh-add -l > /dev/null | grep ${file%.*}"
+      echo "[ \$? -gt 0 ] && ssh-add ${file%.*} > /dev/null"
+    done
+    for file in $folder/*.pem; do
+      echo "ssh-add -l > /dev/null | grep $file"
+      echo "[ \$? -gt 0 ] && ssh-add $file > /dev/null"
+    done
 
     echo -n "/usr/bin/ssh " > $profile_folder/bin/ssh
-    [ -e "$folder/id_rsa" ] && echo -n "-i $folder/id_rsa " >> $profile_folder/bin/ssh
     [ -e "$folder/known_hosts" ] && echo -n "-o UserKnownHostsFile=$folder/known_hosts " >> $profile_folder/bin/ssh
     [ -e "$folder/config" ] && echo -n "-F $folder/config " >> $profile_folder/bin/ssh
     echo "\$@" >> $profile_folder/bin/ssh
