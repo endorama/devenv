@@ -34,7 +34,7 @@ profile_load_envs() {
   # local env
 
   if [ -e $file ]; then
-    while read -r line; do  
+    while read -r line; do
       # discard empty lines or spaces only lines and lines starting with #
       if [[ "$line" =~ [^[:space:]] && ! "$line" =~ \#.* ]]; then
         # get env from line
@@ -87,7 +87,7 @@ profile_load_ssh() {
 profile_export_path() {
   local profile_folder
   profile_folder=$1
-  echo "export PATH=$profile_folder/bin:\$PATH" 
+  echo "export PATH=$profile_folder/bin:\$PATH"
 }
 
 profile_generate_loader() {
@@ -96,10 +96,11 @@ profile_generate_loader() {
   local profile_folder
   profile_folder="$(get_config "profiles")/$profile"
 
-  echo "#!$SHELL" 
-  echo "#" 
-  echo "" 
-  echo "export DEVENV_ACTIVE_PROFILE=$profile" 
+  echo "#!$SHELL"
+  echo "#"
+  echo ""
+  echo "export DEVENV_ACTIVE_PROFILE='$profile'"
+  echo "export DEVENV_ACTIVE_PROFILE_PATH='$profile_folder'"
   profile_prepare_bin_folder $profile_folder
   profile_load_envs $profile_folder
   profile_load_ssh $profile_folder $profile
