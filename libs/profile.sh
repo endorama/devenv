@@ -56,12 +56,14 @@ profile_load_ssh() {
   profile=$2
   local folder
   folder="$profile_folder/ssh"
+  local ssh_agent_cache
+  ssh_agent_cache="/tmp/$profile-ssh-agent.tmp"
 
-  echo "if [ ! -f /tmp/$profile-ssh-agent.tmp ]; then"
-    echo "echo \$(ssh-agent -s | sed \"s/echo/# echo/\") > /tmp/$profile-ssh-agent.tmp"
-    echo "chown $USER:$USER; chmod 700 $USER"
+  echo "if [ ! -f $ssh_agent_cache ]; then"
+    echo "echo \$(ssh-agent -s | sed \"s/echo/# echo/\") > $ssh_agent_cache"
+    echo "chown $USER:$USER $ssh_agent_cache; chmod 700 $ssh_agent_cache"
   echo "fi"
-  echo "source /tmp/$profile-ssh-agent.tmp"
+  echo "source $ssh_agent_cache"
 
   if [ -d $folder ]; then
     if [ -e "$folder/id_rsa" ]; then
