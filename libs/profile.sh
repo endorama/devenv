@@ -80,6 +80,11 @@ profile_load_ssh() {
     [ -e "$folder/config" ] && echo -n "-F $folder/config " >> $profile_folder/bin/ssh
     echo "\$@" >> $profile_folder/bin/ssh
     chmod +x $profile_folder/bin/ssh
+
+    echo -n "/usr/bin/scp " > $profile_folder/bin/scp
+    [ -e "$folder/config" ] && echo -n "-F $folder/config " >> $profile_folder/bin/scp
+    echo "\$@" >> $profile_folder/bin/scp
+    chmod +x $profile_folder/bin/scp
   fi
 
   return 0
