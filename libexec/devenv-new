@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+SCRIPT="$(readlink --canonicalize-existing "$0")"
+SCRIPTPATH="$(dirname "$SCRIPT")"
+SCRIPTNAME="$(basename "$SCRIPT")"
+# Thanks https://dev.to/thiht/shell-scripts-matter :)
+
+#/ Usage: devenv new [OPTIONS] <profile name>
+#/ Description: Create a new developer environment profile
+#/ Examples: :)
+#/ Options:
+#/   -m <email>: specify custom email
+#/   -s: enable ssh setup
+#/   --help: Display this help message
+#/   --version: Display programm version
+#/ Version: 0.1.0
+usage() { grep '^#/' "$0" | cut -c4- ; exit 0 ; }
+version() { grep '^#/ Version:' "$0" | cut -c13- ; exit 0 ; }
+expr "$*" : ".*--help" > /dev/null && usage
+expr "$*" : ".*--version" > /dev/null && version
+
+set -e
+
+source $_DEVENV_ROOT/libs/ui.sh
+source $_DEVENV_ROOT/libs/profile.sh
+
+setup_gpg=false
+setup_ssh=false
+email="edoardo.tenani@gmail.com"
+
+# cleanup() {}
+
+create_profile() {
+	profile_exists $profile_name || mkdir $profile_folder
+	profile_prepare_bin_folder $profile_folder
+	profile_prepare_envs_file $profile_folder
+	return 0
+}
+
+setup_email() {
+	e_arrow "use email $email"
+	if ! grep EMAIL $profile_folder/envs > /dev/null; then
+		echo "EMAIL=$email" >> $profile_folder/envs
+	fi
+	e_ok
+}
+
+# setup_gpg() {
+# 	if [[ "$setup_gpg" = true ]]; then
+# 		e_arrow "setup gpg"
+# 	fi
+# }
+
+setup_ssh() {
+	if [[ "$setup_ssh" = true ]]; then
+		e_arrow "setup ssh"
+		profile_prepare_ssh_folder $profile_folder
+		if [ ! -f "$profile_folder/ssh/id_rsa" ]; then
+			if e_prompt "Generate new ssh keypair?"; then
+				read -p "Add comment: " comment
+				if [[ $comment != "" ]]; then
+					comment="$email-$profile_name-$comment"
+				else
+					comment="$email-$profile_name"
+				fi
+				ssh-keygen -b 4096 -t rsa -C $comment -f "$profile_folder/ssh/id_rsa"
+			fi
+		fi
+	fi
+	e_ok
+}
+
+# Parse command line options.
+while getopts gm:s OPT; do
+	case "$OPT" in
+	g)
+		setup_gpg=true
+		;;
+	m)
+		email=$OPTARG
+		;;
+	s)
+		setup_ssh=true
+		;;
+	\?)
+		# getopts issues an error message
+		usage
+		exit 1
+		;;
+	esac
+done
+# Remove the switches we parsed above.
+shift `expr $OPTIND - 1`
+
+profile_name=$1
+profile_folder=$PROFILE_PATHS/$profile_name
+
+if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
+    # trap cleanup EXIT
+    e_header "Creating profile '$profile_name'"
+
+    create_profile
+
+    setup_email
+    # setup_gpg
+    setup_ssh
+    devenv rehash $profile_name
+    exit 0
+fi
