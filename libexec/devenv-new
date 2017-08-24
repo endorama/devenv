@@ -6,8 +6,8 @@ SCRIPTPATH="$(dirname "$SCRIPT")"
 SCRIPTNAME="$(basename "$SCRIPT")"
 # Thanks https://dev.to/thiht/shell-scripts-matter :)
 
-#/ Usage: devenv new [OPTIONS] <profile name>
-#/ Description: Create a new developer environment profile
+#/ Usage: devenv new [OPTIONS|--help] <profile name>
+#/ Summary: Create a new developer environment profile
 #/ Examples: :)
 #/ Options:
 #/   -m <email>: specify custom email
