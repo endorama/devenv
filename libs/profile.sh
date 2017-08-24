@@ -108,6 +108,7 @@ profile_generate_loader() {
   echo "export DEVENV_ACTIVE_PROFILE='$profile'"
   echo "export DEVENV_ACTIVE_PROFILE_PATH='$profile_folder'"
   profile_prepare_bin_folder $profile_folder
+  echo "export HISTFILE='$profile_folder/zsh-history'"
   profile_load_envs $profile_folder
   profile_load_ssh $profile_folder $profile
   profile_export_path $profile_folder
