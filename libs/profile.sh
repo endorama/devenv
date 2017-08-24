@@ -23,7 +23,21 @@ profile_exists() {
 profile_prepare_bin_folder() {
   local profile_folder
   profile_folder=$1
-  mkdir -p $profile_folder/bin
+  mkdir -p "$profile_folder/bin"
+}
+
+profile_prepare_ssh_folder() {
+  local profile_folder
+  profile_folder=$1
+  mkdir -p "$profile_folder/ssh"
+  [ -e "$profile_folder/ssh/config" ] || touch "$profile_folder/ssh/config"
+  [ -e "$profile_folder/ssh/known_hosts" ] || touch "$profile_folder/ssh/known_hosts"
+}
+
+profile_prepare_envs_file() {
+  local profile_folder
+  profile_folder=$1
+  [ -e "$profile_folder/envs" ] || touch "$profile_folder/envs"
 }
 
 profile_load_envs() {
