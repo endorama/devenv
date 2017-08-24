@@ -13,3 +13,13 @@ e_ok()       { e_success "ok"; }
 e_abort()    { e_error $1; exit $2; }
 # $1 => warn message
 e_return()    { e_warn $1; }
+
+e_prompt() {
+	echo $1
+	select yn in "Yes" "No"; do
+	    case $yn in
+	        Yes ) return 0; break;;
+	        No ) return 1; break;;
+	    esac
+	done
+}
