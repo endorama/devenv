@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Usage: devenv show <profile>
+# Summary: Show profile load file and run file ( if present )
+
+set -e
+
+source $_DEVENV_ROOT/libs/ui.sh
+source $_DEVENV_ROOT/libs/config.sh
+source $_DEVENV_ROOT/libs/profile.sh
+
+[ $# -eq 0 ] && e_abort "required argument: profile name"
+
+profile=$1
+profile_load_file="$(get_config "profiles")/$profile/load.sh"
+profile_run_file="$(get_config "profiles")/$profile/run.sh"
+
+if [ -e $profile_load_file ]; then
+  e_header "$profile_load_file"
+  cat "$profile_load_file"
+fi
+if [ -e $profile_run_file ]; then
+  e_header "$profile_run_file"
+  cat "$profile_run_file"
+fi
+
+# echo "# END"
