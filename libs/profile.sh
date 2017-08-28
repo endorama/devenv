@@ -6,7 +6,7 @@ PROFILE_PATHS="${_DEVENV_ROOT}/profiles"
 
 function get_active_profile() {
   DEVENV_ACTIVE_PROFILE=${DEVENV_ACTIVE_PROFILE:-}
-  [[ $DEVENV_ACTIVE_PROFILE ]] && echo $DEVENV_ACTIVE_PROFILE
+  [[ "$DEVENV_ACTIVE_PROFILE" ]] && echo "$DEVENV_ACTIVE_PROFILE"
   echo ""
 }
 
@@ -47,7 +47,7 @@ profile_load_envs() {
   file="$profile_folder/envs"
   # local env
 
-  if [ -e $file ]; then
+  if [ -e "$file" ]; then
     while read -r line; do
       # discard empty lines or spaces only lines and lines starting with #
       if [[ "$line" =~ [^[:space:]] && ! "$line" =~ \#.* ]]; then
@@ -79,7 +79,7 @@ profile_load_ssh() {
   echo "fi"
   echo "source $ssh_agent_cache"
 
-  if [ -d $folder ]; then
+  if [ -d "$folder" ]; then
     for file in $folder/*.pub; do
       echo "ssh-add -l > /dev/null | grep ${file%.*}"
       echo "[ \$? -gt 0 ] && ssh-add ${file%.*} > /dev/null"
@@ -89,16 +89,16 @@ profile_load_ssh() {
       echo "[ \$? -gt 0 ] && ssh-add $file > /dev/null"
     done
 
-    echo -n "/usr/bin/ssh " > $profile_folder/bin/ssh
-    [ -e "$folder/known_hosts" ] && echo -n "-o UserKnownHostsFile=$folder/known_hosts " >> $profile_folder/bin/ssh
-    [ -e "$folder/config" ] && echo -n "-F $folder/config " >> $profile_folder/bin/ssh
-    echo "\$@" >> $profile_folder/bin/ssh
-    chmod +x $profile_folder/bin/ssh
+    echo -n "/usr/bin/ssh " > "$profile_folder/bin/ssh"
+    [ -e "$folder/known_hosts" ] && echo -n "-o UserKnownHostsFile=$folder/known_hosts " >> "$profile_folder/bin/ssh"
+    [ -e "$folder/config" ] && echo -n "-F $folder/config " >> "$profile_folder/bin/ssh"
+    echo "\$@" >> "$profile_folder/bin/ssh"
+    chmod +x "$profile_folder/bin/ssh"
 
-    echo -n "/usr/bin/scp " > $profile_folder/bin/scp
-    [ -e "$folder/config" ] && echo -n "-F $folder/config " >> $profile_folder/bin/scp
-    echo "\$@" >> $profile_folder/bin/scp
-    chmod +x $profile_folder/bin/scp
+    echo -n "/usr/bin/scp " > "$profile_folder/bin/scp"
+    [ -e "$folder/config" ] && echo -n "-F $folder/config " >> "$profile_folder/bin/scp"
+    echo "\$@" >> "$profile_folder/bin/scp"
+    chmod +x "$profile_folder/bin/scp"
   fi
 
   return 0
@@ -121,9 +121,9 @@ profile_generate_loader() {
   echo ""
   echo "export DEVENV_ACTIVE_PROFILE='$profile'"
   echo "export DEVENV_ACTIVE_PROFILE_PATH='$profile_folder'"
-  profile_prepare_bin_folder $profile_folder
+  profile_prepare_bin_folder "$profile_folder"
   echo "export HISTFILE='$profile_folder/zsh-history'"
-  profile_load_envs $profile_folder
-  profile_load_ssh $profile_folder $profile
-  profile_export_path $profile_folder
+  profile_load_envs "$profile_folder"
+  profile_load_ssh "$profile_folder" "$profile"
+  profile_export_path "$profile_folder"
 }

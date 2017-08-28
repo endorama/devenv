@@ -4,8 +4,8 @@
 
 set -e
 
-source $_DEVENV_ROOT/libs/ui.sh
-source $_DEVENV_ROOT/libs/profile.sh
+source "$_DEVENV_ROOT/libs/ui.sh"
+source "$_DEVENV_ROOT/libs/profile.sh"
 
 PROFILE_PATHS="$_DEVENV_ROOT/profiles"
 
@@ -22,15 +22,15 @@ is_active() {
   fi
 }
 
-profiles=$(ls -d $PROFILE_PATHS/*)
+profiles=$(ls -d "$PROFILE_PATHS/*")
 for profile in $profiles; do
   #is_active $profile
-  profile=$(basename $profile)
+  profile=$(basename "$profile")
   if [[ $profile != "active_profile" && $profile != "shared" ]]; then
-    if [[ $(is_active $profile) == "yes" ]]; then
-      e_message '* '"$(basename $profile)"
+    if [[ $(is_active "$profile") == "yes" ]]; then
+      e_message '* '"$(basename "$profile")"
     else
-      e_message '  '"$(basename $profile)"
+      e_message '  '"$(basename "$profile")"
     fi
   fi
 done
