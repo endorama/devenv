@@ -6,8 +6,9 @@ set -e
 
 source "$_DEVENV_ROOT/libs/ui.sh"
 source "$_DEVENV_ROOT/libs/profile.sh"
+source "$_DEVENV_ROOT/libs/config.sh"
 
-PROFILE_PATHS="$_DEVENV_ROOT/profiles"
+PROFILE_PATHS="$(get_config "profiles")"
 
 is_active() {
   local profile
@@ -22,7 +23,8 @@ is_active() {
   fi
 }
 
-profiles=$(ls -d "$PROFILE_PATHS/*")
+profiles=$(ls -d $PROFILE_PATHS/*)
+
 for profile in $profiles; do
   #is_active $profile
   profile=$(basename "$profile")
