@@ -31,15 +31,6 @@ email="edoardo.tenani@gmail.com"
 
 # cleanup() {}
 
-create_profile() {
-  local profile_name
-  profile_name=$1
-  local profile_folder
-  profile_folder=$2
-	profile_exists "$profile_name" || mkdir "$profile_folder"
-	return 0
-}
-
 setup_email() {
 	e_arrow "use email $email"
 	if ! grep EMAIL "$profile_folder/envs" > /dev/null; then

@@ -25,6 +25,15 @@ profile_exists() {
   fi
 }
 
+create_profile() {
+  local profile_name
+  profile_name=$1
+  local profile_folder
+  profile_folder=$2
+  profile_exists "$profile_name" || mkdir "$profile_folder"
+  return 0
+}
+
 profile_export_path() {
   local profile_folder
   profile_folder=$1
