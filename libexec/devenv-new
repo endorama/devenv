@@ -10,8 +10,6 @@ IFS=$'\n\t'
 #/ Summary: Create a new developer environment profile
 #/ Examples: :)
 #/ Options:
-#/   -m <email>: specify custom email
-#/   -s: enable ssh setup
 #/   --help: Display this help message
 #/   --version: Display programm version
 #/ Version: 0.1.0
@@ -25,8 +23,6 @@ set -e
 source "$_DEVENV_ROOT/libs/ui.sh"
 source "$_DEVENV_ROOT/libs/profile.sh"
 
-# setup_gpg=false
-setup_ssh=false
 email="edoardo.tenani@gmail.com"
 
 # cleanup() {}
@@ -39,33 +35,19 @@ setup_email() {
 	e_ok
 }
 
-# setup_gpg() {
-# 	if [[ "$setup_gpg" = true ]]; then
-# 		e_arrow "setup gpg"
-# 	fi
-# }
-
-
-
 # Parse command line options.
-while getopts gm:s OPT; do
-	case "$OPT" in
-	g)
-		# setup_gpg=true
-		;;
-	m)
-		email=$OPTARG
-		;;
-	s)
-		setup_ssh=true
-		;;
-	\?)
-		# getopts issues an error message
-		usage
-		exit 1
-		;;
-	esac
-done
+# while getopts m: OPT; do
+# 	case "$OPT" in
+# 	m)
+# 		email=$OPTARG
+# 		;;
+# 	\?)
+# 		# getopts issues an error message
+# 		usage
+# 		exit 1
+# 		;;
+# 	esac
+# done
 # Remove the switches we parsed above.
 shift "$((OPTIND - 1))"
 
@@ -77,14 +59,15 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
     e_header "Creating profile '$profile_name'"
 
     create_profile "$profile_name" "$profile_folder"
+
     profile_prepare_bin_folder "$profile_folder"
     profile_prepare_envs_file "$profile_folder"
     profile_prepare_aws_folder "$profile_folder"
 
     setup_email "$profile_folder"
-    # setup_gpg
     setup_ssh "$profile_folder"
     setup_aws "$profile_folder"
+
     devenv rehash "$profile_name"
     exit 0
 fi
