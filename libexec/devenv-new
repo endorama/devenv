@@ -32,9 +32,11 @@ email="edoardo.tenani@gmail.com"
 # cleanup() {}
 
 create_profile() {
+  local profile_name
+  profile_name=$1
+  local profile_folder
+  profile_folder=$2
 	profile_exists "$profile_name" || mkdir "$profile_folder"
-	profile_prepare_bin_folder "$profile_folder"
-	profile_prepare_envs_file "$profile_folder"
 	return 0
 }
 
@@ -100,11 +102,13 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
     # trap cleanup EXIT
     e_header "Creating profile '$profile_name'"
 
-    create_profile
+    create_profile "$profile_name" "$profile_folder"
+    profile_prepare_bin_folder "$profile_folder"
+    profile_prepare_envs_file "$profile_folder"
 
-    setup_email
+    setup_email "$profile_folder"
     # setup_gpg
-    setup_ssh
+    setup_ssh "$profile_folder"
     devenv rehash "$profile_name"
     exit 0
 fi

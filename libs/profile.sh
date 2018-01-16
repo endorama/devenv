@@ -4,6 +4,10 @@ set -euo pipefail
 
 PROFILE_PATHS="${_DEVENV_ROOT}/profiles"
 
+source "$_DEVENV_ROOT/libs/plugins/bin.sh"
+source "$_DEVENV_ROOT/libs/plugins/env.sh"
+source "$_DEVENV_ROOT/libs/plugins/ssh.sh"
+
 function get_active_profile() {
   DEVENV_ACTIVE_PROFILE=${DEVENV_ACTIVE_PROFILE:-}
   [[ "$DEVENV_ACTIVE_PROFILE" ]] && echo "$DEVENV_ACTIVE_PROFILE"
@@ -18,90 +22,6 @@ profile_exists() {
   else
     return 0
   fi
-}
-
-profile_prepare_bin_folder() {
-  local profile_folder
-  profile_folder=$1
-  mkdir -p "$profile_folder/bin"
-}
-
-profile_prepare_ssh_folder() {
-  local profile_folder
-  profile_folder=$1
-  mkdir -p "$profile_folder/ssh"
-  [ -e "$profile_folder/ssh/config" ] || touch "$profile_folder/ssh/config"
-  [ -e "$profile_folder/ssh/known_hosts" ] || touch "$profile_folder/ssh/known_hosts"
-}
-
-profile_prepare_envs_file() {
-  local profile_folder
-  profile_folder=$1
-  [ -e "$profile_folder/envs" ] || touch "$profile_folder/envs"
-}
-
-profile_load_envs() {
-  local profile_folder
-  profile_folder=$1
-  local file
-  file="$profile_folder/envs"
-  # local env
-
-  if [ -e "$file" ]; then
-    while read -r line; do
-      # discard empty lines or spaces only lines and lines starting with #
-      if [[ "$line" =~ [^[:space:]] && ! "$line" =~ \#.* ]]; then
-        # get env from line
-        # env=$(echo $line | cut -d "=" -f 1)
-        # export if not already present
-        # if [[ $(printenv ${env}) == "" ]]; then
-          echo "export ${line}"
-        # fi
-      fi
-    done < "$file"
-  fi
-  return 0
-}
-
-profile_load_ssh() {
-  local profile_folder
-  profile_folder=$1
-  local profile
-  profile=$2
-  local folder
-  folder="$profile_folder/ssh"
-  local ssh_agent_cache
-  ssh_agent_cache="/tmp/$profile-ssh-agent.tmp"
-
-  echo "if [ ! -f $ssh_agent_cache ]; then"
-    echo "echo \$(ssh-agent -s | sed \"s/echo/# echo/\") > $ssh_agent_cache"
-    echo "chown $USER:$USER $ssh_agent_cache; chmod 700 $ssh_agent_cache"
-  echo "fi"
-  echo "source $ssh_agent_cache"
-
-  if [ -d "$folder" ]; then
-    for file in $folder/*.pub; do
-      echo "ssh-add -l > /dev/null | grep ${file%.*}"
-      echo "[ \$? -gt 0 ] && ssh-add ${file%.*} > /dev/null"
-    done
-    for file in $folder/*.pem; do
-      echo "ssh-add -l > /dev/null | grep $file"
-      echo "[ \$? -gt 0 ] && ssh-add $file > /dev/null"
-    done
-
-    echo -n "/usr/bin/ssh " > "$profile_folder/bin/ssh"
-    [ -e "$folder/known_hosts" ] && echo -n "-o UserKnownHostsFile=$folder/known_hosts " >> "$profile_folder/bin/ssh"
-    [ -e "$folder/config" ] && echo -n "-F $folder/config " >> "$profile_folder/bin/ssh"
-    echo "\$@" >> "$profile_folder/bin/ssh"
-    chmod +x "$profile_folder/bin/ssh"
-
-    echo -n "/usr/bin/scp " > "$profile_folder/bin/scp"
-    [ -e "$folder/config" ] && echo -n "-F $folder/config " >> "$profile_folder/bin/scp"
-    echo "\$@" >> "$profile_folder/bin/scp"
-    chmod +x "$profile_folder/bin/scp"
-  fi
-
-  return 0
 }
 
 profile_export_path() {
