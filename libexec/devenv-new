@@ -88,10 +88,12 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
     create_profile "$profile_name" "$profile_folder"
     profile_prepare_bin_folder "$profile_folder"
     profile_prepare_envs_file "$profile_folder"
+    profile_prepare_aws_folder "$profile_folder"
 
     setup_email "$profile_folder"
     # setup_gpg
     setup_ssh "$profile_folder"
+    setup_aws "$profile_folder"
     devenv rehash "$profile_name"
     exit 0
 fi

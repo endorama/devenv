@@ -7,6 +7,7 @@ PROFILE_PATHS="${_DEVENV_ROOT}/profiles"
 source "$_DEVENV_ROOT/libs/plugins/bin.sh"
 source "$_DEVENV_ROOT/libs/plugins/env.sh"
 source "$_DEVENV_ROOT/libs/plugins/ssh.sh"
+source "$_DEVENV_ROOT/libs/plugins/aws.sh"
 
 function get_active_profile() {
   DEVENV_ACTIVE_PROFILE=${DEVENV_ACTIVE_PROFILE:-}
@@ -45,5 +46,6 @@ profile_generate_loader() {
   echo "export HISTFILE='$profile_folder/zsh-history'"
   profile_load_envs "$profile_folder"
   profile_load_ssh "$profile_folder" "$profile"
+  profile_load_aws "$profile_folder" "$profile"
   profile_export_path "$profile_folder"
 }
