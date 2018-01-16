@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
+# provide devenv completions
 set -e
 
 source "$_DEVENV_ROOT/libs/ui.sh"
 source "$_DEVENV_ROOT/libs/config.sh"
 source "$_DEVENV_ROOT/libs/profile.sh"
+
+if [ $1 = "--complete" ]; then
+  exec ls $(get_config "profiles")/
+  exit
+fi
 
 [ $# -eq 0 ] && e_abort "required argument: profile name"
 
