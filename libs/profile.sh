@@ -2,7 +2,9 @@
 
 set -euo pipefail
 
-PROFILE_PATHS="${_DEVENV_ROOT}/profiles"
+source "$_DEVENV_ROOT/libs/config.sh"
+
+PROFILE_PATHS="$(get_config "profiles")"
 
 source "$_DEVENV_ROOT/libs/plugins/bin.sh"
 source "$_DEVENV_ROOT/libs/plugins/env.sh"
