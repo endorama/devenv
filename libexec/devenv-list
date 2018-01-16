@@ -14,7 +14,7 @@ is_active() {
   local profile
   local active_profile
   profile=$1
-  active_profile="$(get_active_profile)"
+  active_profile="$(__devenv_profile_get_active)"
   # echo $active_profile
   if [ "$profile" == "$active_profile" ]; then
     echo "yes"

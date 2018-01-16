@@ -58,7 +58,7 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
     # trap cleanup EXIT
     __devenv_ui_header "Creating profile '$profile_name'"
 
-    create_profile "$profile_name" "$profile_folder"
+    __devenv_profile_create "$profile_name" "$profile_folder"
 
     profile_prepare_bin_folder "$profile_folder"
     profile_prepare_envs_file "$profile_folder"

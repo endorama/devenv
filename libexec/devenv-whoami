@@ -6,7 +6,7 @@ set -e
 
 source "$_DEVENV_ROOT/libs/profile.sh"
 
-active_profile="$(get_active_profile)"
+active_profile="$(__devenv_profile_get_active)"
 
 if [[ "$active_profile" != "" ]]; then
   echo "$active_profile"

@@ -11,13 +11,13 @@ source "$_DEVENV_ROOT/libs/plugins/env.sh"
 source "$_DEVENV_ROOT/libs/plugins/ssh.sh"
 source "$_DEVENV_ROOT/libs/plugins/aws.sh"
 
-function get_active_profile() {
+__devenv_profile_get_active() {
   DEVENV_ACTIVE_PROFILE=${DEVENV_ACTIVE_PROFILE:-}
   [[ "$DEVENV_ACTIVE_PROFILE" ]] && echo "$DEVENV_ACTIVE_PROFILE"
   echo ""
 }
 
-profile_exists() {
+__devenv_profile_exists() {
   local profile_name
   profile_name=$1
   if [ ! -d "$PROFILE_PATHS/$profile_name" ]; then
@@ -27,22 +27,22 @@ profile_exists() {
   fi
 }
 
-create_profile() {
+__devenv_profile_create() {
   local profile_name
   profile_name=$1
   local profile_folder
   profile_folder=$2
-  profile_exists "$profile_name" || mkdir "$profile_folder"
+  __devenv_profile_exists "$profile_name" || mkdir "$profile_folder"
   return 0
 }
 
-profile_export_path() {
+__devenv_profile_export_path() {
   local profile_folder
   profile_folder=$1
   echo "export PATH=$profile_folder/bin:\$PATH"
 }
 
-profile_generate_loader() {
+__devenv_profile_generate_loader() {
   local profile
   profile=$1
   local profile_folder
@@ -58,5 +58,5 @@ profile_generate_loader() {
   profile_load_envs "$profile_folder"
   profile_load_ssh "$profile_folder" "$profile"
   profile_load_aws "$profile_folder" "$profile"
-  profile_export_path "$profile_folder"
+  __devenv_profile_export_path "$profile_folder"
 }
