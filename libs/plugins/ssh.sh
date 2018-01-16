@@ -8,10 +8,10 @@ profile_prepare_ssh_folder() {
 }
 
 setup_ssh() {
-  e_arrow "setup ssh"
+  __devenv_ui_arrow "setup ssh"
   profile_prepare_ssh_folder "$profile_folder"
   if [ ! -f "$profile_folder/ssh/id_rsa" ]; then
-    if e_prompt "Generate new ssh keypair?"; then
+    if __devenv_ui_prompt "Generate new ssh keypair?"; then
       read -p "Add comment: " comment
       if [[ $comment != "" ]]; then
         comment="$email-$profile_name-$comment"
@@ -21,7 +21,7 @@ setup_ssh() {
       ssh-keygen -b 4096 -t rsa -C "$comment" -f "$profile_folder/ssh/id_rsa"
     fi
   fi
-  e_ok
+  __devenv_ui_ok
 }
 
 profile_load_ssh() {

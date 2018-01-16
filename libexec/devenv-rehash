@@ -9,10 +9,10 @@ source "$_DEVENV_ROOT/libs/ui.sh"
 source "$_DEVENV_ROOT/libs/profile.sh"
 source "$_DEVENV_ROOT/libs/config.sh"
 
-[ $# -eq 0 ] && e_abort "required argument: profile name"
+[ $# -eq 0 ] && __devenv_ui_abort "required argument: profile name"
 
 profile=$1
-profile_exists "$profile" || e_abort "profile does not exists" 127
+profile_exists "$profile" || __devenv_ui_abort "profile does not exists" 127
 
 profile_load_file="$(get_config "profiles")/$profile/load.sh"
 profile_run_file="$(get_config "profiles")/$profile/run.sh"

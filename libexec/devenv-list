@@ -30,9 +30,9 @@ for profile in $profiles; do
   profile=$(basename "$profile")
   if [[ $profile != "active_profile" && $profile != "shared" ]]; then
     if [[ $(is_active "$profile") == "yes" ]]; then
-      e_message '* '"$(basename "$profile")"
+      __devenv_ui_message '* '"$(basename "$profile")"
     else
-      e_message '  '"$(basename "$profile")"
+      __devenv_ui_message '  '"$(basename "$profile")"
     fi
   fi
 done

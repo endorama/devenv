@@ -9,10 +9,10 @@ profile_prepare_aws_folder() {
 
 
 setup_aws() {
-  e_arrow "setup aws"
+  __devenv_ui_arrow "setup aws"
   profile_prepare_aws_folder "$profile_folder"
 
-  e_ok
+  __devenv_ui_ok
 }
 
 profile_load_aws() {

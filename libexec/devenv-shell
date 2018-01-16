@@ -11,7 +11,7 @@ if [ $1 = "--complete" ]; then
   exit
 fi
 
-[ $# -eq 0 ] && e_abort "required argument: profile name"
+[ $# -eq 0 ] && __devenv_ui_abort "required argument: profile name"
 
 profile=$1
 profile_load_file="$(get_config "profiles")/$profile/load.sh"

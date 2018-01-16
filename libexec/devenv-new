@@ -28,11 +28,11 @@ email="edoardo.tenani@gmail.com"
 # cleanup() {}
 
 setup_email() {
-	e_arrow "use email $email"
+	__devenv_ui_arrow "use email $email"
 	if ! grep EMAIL "$profile_folder/envs" > /dev/null; then
 		echo "EMAIL=$email" >> "$profile_folder/envs"
 	fi
-	e_ok
+	__devenv_ui_ok
 }
 
 # Parse command line options.
@@ -56,7 +56,7 @@ profile_folder=$PROFILE_PATHS/$profile_name
 
 if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
     # trap cleanup EXIT
-    e_header "Creating profile '$profile_name'"
+    __devenv_ui_header "Creating profile '$profile_name'"
 
     create_profile "$profile_name" "$profile_folder"
 
