@@ -7,14 +7,14 @@ source "$_DEVENV_ROOT/libs/config.sh"
 source "$_DEVENV_ROOT/libs/profile.sh"
 
 if [ $1 = "--complete" ]; then
-  exec ls $(get_config "profiles")/
+  exec ls $(__devenv_config_get "profiles")/
   exit
 fi
 
 [ $# -eq 0 ] && __devenv_ui_abort "required argument: profile name"
 
 profile=$1
-profile_load_file="$(get_config "profiles")/$profile/load.sh"
+profile_load_file="$(__devenv_config_get "profiles")/$profile/load.sh"
 
 if [ -e "$profile_load_file" ]; then
   "$profile_load_file"

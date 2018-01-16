@@ -4,7 +4,7 @@ set -euo pipefail
 
 source "$_DEVENV_ROOT/libs/config.sh"
 
-PROFILE_PATHS="$(get_config "profiles")"
+PROFILE_PATHS="$(__devenv_config_get "profiles")"
 
 source "$_DEVENV_ROOT/libs/plugins/bin.sh"
 source "$_DEVENV_ROOT/libs/plugins/env.sh"
@@ -46,7 +46,7 @@ profile_generate_loader() {
   local profile
   profile=$1
   local profile_folder
-  profile_folder="$(get_config "profiles")/$profile"
+  profile_folder="$PROFILE_PATHS/$profile"
 
   echo "#!$SHELL"
   echo "#"

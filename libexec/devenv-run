@@ -11,6 +11,6 @@ source "$_DEVENV_ROOT/libs/config.sh"
 
 profile="$1"
 shift 1
-profile_run_file="$(get_config "profiles")/$profile/run.sh"
+profile_run_file="$(__devenv_config_get "profiles")/$profile/run.sh"
 
 exec "$profile_run_file" "$*"

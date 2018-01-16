@@ -8,7 +8,7 @@ source "$_DEVENV_ROOT/libs/ui.sh"
 source "$_DEVENV_ROOT/libs/profile.sh"
 source "$_DEVENV_ROOT/libs/config.sh"
 
-PROFILE_PATHS="$(get_config "profiles")"
+PROFILE_PATHS="$(__devenv_config_get "profiles")"
 
 is_active() {
   local profile

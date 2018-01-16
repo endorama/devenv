@@ -14,8 +14,8 @@ source "$_DEVENV_ROOT/libs/config.sh"
 profile=$1
 profile_exists "$profile" || __devenv_ui_abort "profile does not exists" 127
 
-profile_load_file="$(get_config "profiles")/$profile/load.sh"
-profile_run_file="$(get_config "profiles")/$profile/run.sh"
+profile_load_file="$(__devenv_config_get "profiles")/$profile/load.sh"
+profile_run_file="$(__devenv_config_get "profiles")/$profile/run.sh"
 
 profile_loader=$(profile_generate_loader "$profile")
 
