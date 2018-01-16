@@ -83,12 +83,30 @@ A profile is a folder containing all the required data to load the wanted enviro
 
 There are 3 currently supported types of object inside a profile:
 
+- a `aws` folder for aws config and credential files
 - a `bin` folder for executable override
-- a `ssh` folder for ssh credentials and configurations
 - a `envs` files for environment variable to be loaded
+- a `ssh` folder for ssh credentials and configurations
 
 Profile name can be anything (as long as you can type it in the terminal), but
 note that the name **shared** is reserved by `devenv`, so will be ignored.
+
+### aws
+
+AWS cli is really a nasty peace of tool. It's configurations come from a folder
+( usually `$HOME/.aws` ) in which there are a the configuration and credential
+files. This folder _apparently_ is not configurable.
+
+Generic AWS cli documentation assume you are using the basic credential set, and
+having complex configuration ( for different AWS accounts ) can get messy pretty
+quickly. Plus AWS cli "profiles" needs to be named, and the only way to 
+automatically set the profile to be used by the cli is the `AWS_DEFAULT_PROFILE`
+env variable. 
+
+Thanks to RTFC, the credential folder for the [botocore][botocore] library on 
+which AWS cli is based can be configured [via env variables][botocore-envs]!
+
+So this is the `HOME/.aws`, only in another place!
 
 ### bin
 
@@ -98,6 +116,16 @@ to your path automatically, you can place here profile specific executables.
 If the profile has `ssh` credentials available and use a custom ssh config file
 or ssh known hosts file, a `ssh` and `scp` wrappers will be created to customize
 this configurations.
+
+### envs
+
+The most common scenario in different profiles are different environment variables.
+
+Cloud provider credentials for examples.
+
+Add vars to this file as you where adding them to `/etc/environment`, they will
+all be loaded for the specific profile.
+
 
 ### ssh
 
@@ -118,14 +146,6 @@ these permissions:
 -rwx------  1 user user  132 ago 24 11:31 profile-ssh-agent.tmp
 ```
 
-### envs
-
-The most common scenario in different profiles are different environment variables.
-
-Cloud provider credentials for examples.
-
-Add vars to this file as you where adding them to `/etc/environment`, they will
-all be loaded for the specific profile.
 
 ## How it works
 
@@ -174,4 +194,5 @@ Edoardo Tenani <[@edoardotenani][twitter]>
 [anyenv]: https://github.com/riywo/anyenv
 [sub]: https://github.com/basecamp/sub
 [twitter]: https://twitter.com/edoardotenani
-
+[botocore]: https://github.com/boto/botocore
+[botocore-envs]: https://github.com/boto/botocore/blob/d10dac4f8d812b7c58e3b8f8b117ec4f520aaec1/tests/functional/__init__.py#L19
