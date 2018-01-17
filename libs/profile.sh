@@ -35,6 +35,7 @@ __devenv_profile_create() {
   local profile_folder
   profile_folder=$2
   __devenv_profile_exists "$profile_name" || mkdir "$profile_folder"
+  [ -d "$profile_folder/.config" ] || mkdir "$profile_folder/.config"
   return 0
 }
 
