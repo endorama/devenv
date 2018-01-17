@@ -1,5 +1,5 @@
 
-profile_prepare_aws_folder() {
+__devenv_plugin__aws__setup() {
   local profile_folder
   profile_folder=$1
   mkdir -p "$profile_folder/aws"
@@ -8,16 +8,16 @@ profile_prepare_aws_folder() {
 }
 
 
-setup_aws() {
+__devenv_plugin__aws__configure() {
   __devenv_ui_arrow "setup aws"
-  profile_prepare_aws_folder "$profile_folder"
-
   __devenv_ui_ok
 }
 
-profile_load_aws() {
+__devenv_plugin__aws__generate_loader() {
   local profile_folder
   profile_folder=$1
+  local profile
+  profile=$2
   echo "export AWS_CONFIG_FILE=$profile_folder/aws/config"
   echo "export AWS_SHARED_CREDENTIALS_FILE=$profile_folder/aws/credentials"
 }

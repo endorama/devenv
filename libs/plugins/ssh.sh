@@ -1,5 +1,5 @@
 
-profile_prepare_ssh_folder() {
+__devenv_plugin__ssh__setup() {
   local profile_folder
   profile_folder=$1
   mkdir -p "$profile_folder/ssh"
@@ -7,9 +7,8 @@ profile_prepare_ssh_folder() {
   [ -e "$profile_folder/ssh/known_hosts" ] || touch "$profile_folder/ssh/known_hosts"
 }
 
-setup_ssh() {
+__devenv_plugin__ssh__configure() {
   __devenv_ui_arrow "setup ssh"
-  profile_prepare_ssh_folder "$profile_folder"
   if [ ! -f "$profile_folder/ssh/id_rsa" ]; then
     if __devenv_ui_prompt "Generate new ssh keypair?"; then
       read -p "Add comment: " comment
@@ -24,7 +23,7 @@ setup_ssh() {
   __devenv_ui_ok
 }
 
-profile_load_ssh() {
+__devenv_plugin__ssh__generate_loader() {
   local profile_folder
   profile_folder=$1
   local profile

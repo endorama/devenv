@@ -60,13 +60,15 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 
     __devenv_profile_create "$profile_name" "$profile_folder"
 
-    profile_prepare_bin_folder "$profile_folder"
-    profile_prepare_envs_file "$profile_folder"
-    profile_prepare_aws_folder "$profile_folder"
-
     setup_email "$profile_folder"
-    setup_ssh "$profile_folder"
-    setup_aws "$profile_folder"
+
+    __devenv_plugin__aws__setup "$profile_folder"
+    __devenv_plugin__bin__setup "$profile_folder"
+    __devenv_plugin__envs__setup "$profile_folder"
+    __devenv_plugin__ssh__setup "$profile_folder"
+
+    __devenv_plugin__aws__configure
+    __devenv_plugin__ssh__configure
 
     devenv rehash "$profile_name"
     exit 0

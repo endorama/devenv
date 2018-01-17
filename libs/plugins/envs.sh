@@ -1,13 +1,15 @@
 
-profile_prepare_envs_file() {
+__devenv_plugin__envs__setup() {
   local profile_folder
   profile_folder=$1
   [ -e "$profile_folder/envs" ] || touch "$profile_folder/envs"
 }
 
-profile_load_envs() {
+__devenv_plugin__envs__generate_loader() {
   local profile_folder
   profile_folder=$1
+  local profile
+  profile=$2
   local file
   file="$profile_folder/envs"
   # local env
