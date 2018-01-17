@@ -11,6 +11,7 @@ source "$_DEVENV_ROOT/libs/plugins/email.sh"
 source "$_DEVENV_ROOT/libs/plugins/envs.sh"
 source "$_DEVENV_ROOT/libs/plugins/ssh.sh"
 source "$_DEVENV_ROOT/libs/plugins/aws.sh"
+source "$_DEVENV_ROOT/libs/plugins/zsh-history.sh"
 
 __devenv_profile_get_active() {
   DEVENV_ACTIVE_PROFILE=${DEVENV_ACTIVE_PROFILE:-}
@@ -48,11 +49,11 @@ __devenv_profile_generate_loader() {
   echo ""
   echo "export DEVENV_ACTIVE_PROFILE='$profile'"
   echo "export DEVENV_ACTIVE_PROFILE_PATH='$profile_folder'"
-  echo "export HISTFILE='$profile_folder/zsh-history'"
 
   __devenv_plugin__aws__generate_loader "$profile_folder" "$profile"
   __devenv_plugin__bin__generate_loader "$profile_folder" "$profile"
   __devenv_plugin__email__generate_loader "$profile_folder" "$profile"
   __devenv_plugin__envs__generate_loader "$profile_folder" "$profile"
   __devenv_plugin__ssh__generate_loader "$profile_folder" "$profile"
+  __devenv_plugin__zshhistory__generate_loader "$profile_folder" "$profile"
 }
