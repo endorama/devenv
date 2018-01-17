@@ -7,6 +7,7 @@ source "$_DEVENV_ROOT/libs/config.sh"
 PROFILE_PATHS="$(__devenv_config_get "profiles")"
 
 source "$_DEVENV_ROOT/libs/plugins/bin.sh"
+source "$_DEVENV_ROOT/libs/plugins/email.sh"
 source "$_DEVENV_ROOT/libs/plugins/envs.sh"
 source "$_DEVENV_ROOT/libs/plugins/ssh.sh"
 source "$_DEVENV_ROOT/libs/plugins/aws.sh"
@@ -51,6 +52,7 @@ __devenv_profile_generate_loader() {
 
   __devenv_plugin__aws__generate_loader "$profile_folder" "$profile"
   __devenv_plugin__bin__generate_loader "$profile_folder" "$profile"
+  __devenv_plugin__email__generate_loader "$profile_folder" "$profile"
   __devenv_plugin__envs__generate_loader "$profile_folder" "$profile"
   __devenv_plugin__ssh__generate_loader "$profile_folder" "$profile"
 }

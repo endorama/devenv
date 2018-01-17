@@ -23,17 +23,7 @@ set -e
 source "$_DEVENV_ROOT/libs/ui.sh"
 source "$_DEVENV_ROOT/libs/profile.sh"
 
-email="edoardo.tenani@gmail.com"
-
 # cleanup() {}
-
-setup_email() {
-	__devenv_ui_arrow "use email $email"
-	if ! grep EMAIL "$profile_folder/envs" > /dev/null; then
-		echo "EMAIL=$email" >> "$profile_folder/envs"
-	fi
-	__devenv_ui_ok
-}
 
 # Parse command line options.
 # while getopts m: OPT; do
@@ -60,14 +50,13 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
 
     __devenv_profile_create "$profile_name" "$profile_folder"
 
-    setup_email "$profile_folder"
-
     __devenv_plugin__aws__setup "$profile_folder"
     __devenv_plugin__bin__setup "$profile_folder"
     __devenv_plugin__envs__setup "$profile_folder"
     __devenv_plugin__ssh__setup "$profile_folder"
 
     __devenv_plugin__aws__configure
+    __devenv_plugin__email__configure
     __devenv_plugin__ssh__configure
 
     devenv rehash "$profile_name"
