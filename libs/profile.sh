@@ -46,6 +46,8 @@ __devenv_profile_generate_loader() {
 
   echo "#!$SHELL"
   echo "#"
+  echo "# This file has been automatically generated with devenv"
+  echo "# Please remember that running 'devenv rehash' will overwrite this file :)"
   echo ""
   echo "export DEVENV_ACTIVE_PROFILE='$profile'"
   echo "export DEVENV_ACTIVE_PROFILE_PATH='$profile_folder'"
