@@ -13,6 +13,8 @@ __devenv_plugin__email__generate_loader() {
   profile_folder=$1
   local profile
   profile=$2
-  email=$(cat $profile_folder/.config/__devenv_plugin__email__config)
-  echo "export EMAIL=$email"
+  if [ -e $profile_folder/.config/__devenv_plugin__email__config ]; then
+    email=$(cat $profile_folder/.config/__devenv_plugin__email__config)
+    echo "export EMAIL=$email"
+  fi
 }
