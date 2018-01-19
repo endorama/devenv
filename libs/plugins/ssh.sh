@@ -42,13 +42,13 @@ __devenv_plugin__ssh__generate_loader() {
   if [ -d "$folder" ]; then
     for file in $folder/*.pub; do
       if [ -e "$file" ]; then
-        echo "ssh-add -l > /dev/null | grep ${file%.*}"
+        echo "ssh-add -l 2> /dev/null | grep ${file%.*} > /dev/null"
         echo "[ \$? -gt 0 ] && ssh-add ${file%.*} > /dev/null"
       fi
     done
     for file in $folder/*.pem; do
       if [ -e "$file" ]; then
-        echo "ssh-add -l > /dev/null | grep $file"
+        echo "ssh-add -l 2> /dev/null | grep $file > /dev/null"
         echo "[ \$? -gt 0 ] && ssh-add $file > /dev/null"
       fi
     done
