@@ -53,10 +53,18 @@ __devenv_profile_generate_loader() {
   echo "export DEVENV_ACTIVE_PROFILE='$profile'"
   echo "export DEVENV_ACTIVE_PROFILE_PATH='$profile_folder'"
 
+  echo "# plugin BEGIN"
+  echo "# plugin: aws"
   __devenv_plugin__aws__generate_loader "$profile_folder" "$profile"
+  echo "# plugin: bin"
   __devenv_plugin__bin__generate_loader "$profile_folder" "$profile"
+  echo "# plugin: email"
   __devenv_plugin__email__generate_loader "$profile_folder" "$profile"
+  echo "# plugin: envs"
   __devenv_plugin__envs__generate_loader "$profile_folder" "$profile"
+  echo "# plugin: ssh"
   __devenv_plugin__ssh__generate_loader "$profile_folder" "$profile"
+  echo "# plugin: zshhistory"
   __devenv_plugin__zshhistory__generate_loader "$profile_folder" "$profile"
+  echo "# plugin END"
 }
