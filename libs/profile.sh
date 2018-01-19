@@ -45,7 +45,7 @@ __devenv_profile_generate_loader() {
   local profile_folder
   profile_folder="$PROFILE_PATHS/$profile"
 
-  echo "#!/usr/bin/bash"
+  echo "#!/bin/bash"
   echo "#"
   echo "# This file has been automatically generated with devenv"
   echo "# Please remember that running 'devenv rehash' will overwrite this file :)"
