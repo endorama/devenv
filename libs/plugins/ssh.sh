@@ -1,3 +1,4 @@
+#/ Configure ssh keys, config and known_hosts
 
 __devenv_plugin__ssh__setup() {
   local profile_folder

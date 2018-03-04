@@ -1,3 +1,4 @@
+#/ Add bin folder to PATH
 
 __devenv_plugin__bin__setup() {
   local profile_folder

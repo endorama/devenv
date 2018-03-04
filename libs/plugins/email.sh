@@ -1,3 +1,4 @@
+#/ Configure EMAIL variable
 
 __devenv_plugin__email__configure() {
   local profile_config_folder

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Usage: devenv rehash
+# Summary: Describe plugins
+
+set -e
+
+for plugin in $(ls "$_DEVENV_ROOT/libs/plugins"); do
+  plugin_desc=$(grep -E "^#/" "$_DEVENV_ROOT/libs/plugins/$plugin" | tr -d "#/")
+
+  plugin=${plugin##*/}
+  plugin=${plugin%.sh}
+
+  echo -e "$plugin:$plugin_desc"
+done

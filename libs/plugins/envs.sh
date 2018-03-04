@@ -1,3 +1,4 @@
+#/ Configure custom environment variables
 
 __devenv_plugin__envs__setup() {
   local profile_folder

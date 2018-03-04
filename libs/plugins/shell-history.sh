@@ -1,3 +1,4 @@
+#/ Store custom shell history
 
 __devenv_plugin__shellhistory__generate_loader() {
   local profile_folder

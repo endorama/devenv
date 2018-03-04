@@ -1,3 +1,4 @@
+#/ Configure AWS cli ( configs and credentials )
 
 __devenv_plugin__aws__setup() {
   local profile_folder
@@ -6,7 +7,6 @@ __devenv_plugin__aws__setup() {
   [ -e "$profile_folder/aws/config" ] || touch "$profile_folder/aws/config"
   [ -e "$profile_folder/aws/credentials" ] || touch "$profile_folder/aws/credentials"
 }
-
 
 __devenv_plugin__aws__configure() {
   __devenv_ui_arrow "setup aws"
