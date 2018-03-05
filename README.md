@@ -8,6 +8,28 @@ Is heavily inspired by the beautiful cli interface of [anyenv][anyenv].
 
 Is based on [37's Signals sub][sub] utility.
 
+---
+**TOC**
+* [Why](#why)
+* [What's inside](#What-s-inside)
+* [Installation](#installation)
+  * [Requirements](#requirements)
+  * [Install](#install)
+* [Configuration](#configuration)
+  * [Available configuration parameter](#available-configuration-parameter)
+* [Profiles](#profiles)
+* [Plugins](#plugins)
+  * [aws](#aws)
+  * [bin](#bin)
+  * [email](#email)
+  * [envs](#envs)
+  * [shell-history](#shell-history)
+  * [ssh](#ssh)
+* [How it works](#how-it-works)
+* [How to use it](#how-to-use-it)
+* [Development](#development)
+---
+
 ## Why
 
 The problem: I started working as a freelance, and with consultancies comes clients.
