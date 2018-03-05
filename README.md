@@ -77,23 +77,33 @@ By default this variable has value of `$XDG_CONFIG_HOME/devenv` if available, or
 
 ## Profiles
 
-`devenv` use the concept of "profiles" to separate different environments.
+`devenv` use the concept of *profiles* to separate different environments.
 
-A profile is a folder containing all the required data to load the wanted environment.
+A profile is a folder containing all the required data to load the wanted environment:
 
-There are 3 currently supported types of object inside a profile:
-
-- a `aws` folder for aws config and credential files
-- a `bin` folder for executable override
-- a `envs` files for environment variable to be loaded
-- a `ssh` folder for ssh credentials and configurations
+- plugin's configurations
+- `devenv` files to properly setup an environment: `load.sh` and `run.sh`
 
 Profile name can be anything (as long as you can type it in the terminal), but
 note that the name **shared** is reserved by `devenv`, so will be ignored.
 
+## Plugins
+
+To support different configurations/programs/whatever, `devenv` uses a modular
+structure called *plugin* for brevity.
+
+Currently available plugins are:
+
+- `aws`: Configure AWS cli ( configs and credentials )
+- `bin`: Add bin folder to PATH
+- `email`: Configure EMAIL variable
+- `envs`: Configure custom environment variables
+- `shell-history`: Store custom shell history
+- `ssh`: Configure ssh keys, config and known_hosts
+
 ### aws
 
-AWS cli is really a nasty peace of tool. It's configurations come from a folder
+AWS cli is really a tricky peace of tool. It's configurations come from a folder
 ( usually `$HOME/.aws` ) in which there are a the configuration and credential
 files. This folder _apparently_ is not configurable.
 
@@ -106,26 +116,38 @@ env variable.
 Thanks to RTFC, the credential folder for the [botocore][botocore] library on 
 which AWS cli is based can be configured [via env variables][botocore-envs]!
 
-So this is the `HOME/.aws`, only in another place!
+So this is the `HOME/.aws`, just in another place!
 
 ### bin
 
-Sometimes you need to wrap a particular command. `devenv` will add this folder
-to your path automatically, you can place here profile specific executables.
+Sometimes you need to wrap a particular command to enable specific functionalities.
+`devenv` will add this `bin` folder to your path automatically, you can place 
+here profile specific executables.
 
 If the profile has `ssh` credentials available and use a custom ssh config file
 or ssh known hosts file, a `ssh` and `scp` wrappers will be created to customize
 this configurations.
 
+### email
+
+An identity is generally tied to an email address. An environment variable `EMAIL`
+is set to the specified email address ( and can be used in the loaded shell
+environment ).
+
 ### envs
 
 The most common scenario in different profiles are different environment variables.
 
-Cloud provider credentials for examples.
+Cloud provider credentials and authentication tokens for example.
 
 Add vars to this file as you where adding them to `/etc/environment`, they will
 all be loaded for the specific profile.
 
+### shell-history
+
+Generally if you use the cli a lot, you search in it's history a lot. If you have
+different shell environments, other profiles history is a noise you want filtered
+out. This plugin enable per-profile shell history file.
 
 ### ssh
 
@@ -133,6 +155,9 @@ Specific keys/certificates for this profile? Specific ssh config file? Or simply
 you would like to separate the known hosts of this profile from the global one?
 
 Look no further and place files inside this folder.
+
+`ssh` and `scp` command will be wrapped to use the per-profile config and known_hosts
+files.
 
 A ssh agent *per profile* is loaded the first time you load a profile, so:
 
