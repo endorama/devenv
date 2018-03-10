@@ -16,8 +16,10 @@ __devenv_profile_exists "$profile" || __devenv_ui_abort "profile does not exists
 
 profile_load_file="$(__devenv_config_get "profiles")/$profile/load.sh"
 profile_run_file="$(__devenv_config_get "profiles")/$profile/run.sh"
-
 profile_loader=$(__devenv_profile_generate_loader "$profile")
+
+__devenv_ui_header "Rehashing $profile"
+__devenv_ui_arrow "$profile_load_file"
 
 # double quotes are mandatory
 echo "$profile_loader" > "$profile_load_file"
@@ -26,7 +28,12 @@ echo 'export LP_PS1_PREFIX="$DEVENV_ACTIVE_PROFILE $LP_PS1_PREFIX"'  >> "$profil
 echo "$SHELL -l"  >> "$profile_load_file"
 chmod 700 "$profile_load_file"
 
+__devenv_ui_ok
+__devenv_ui_arrow "$profile_run_file"
+
 # double quotes are mandatory
 echo "$profile_loader" > "$profile_run_file"
 echo "eval \$@" >> "$profile_run_file"
 chmod 700 "$profile_run_file"
+
+__devenv_ui_ok
