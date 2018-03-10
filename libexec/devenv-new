@@ -53,12 +53,14 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
     __devenv_plugin__aws__setup "$profile_folder"
     __devenv_plugin__bin__setup "$profile_folder"
     __devenv_plugin__envs__setup "$profile_folder"
+    __devenv_plugin__gpg__setup "$profile_folder"
     __devenv_plugin__ssh__setup "$profile_folder"
 
     profile_config_folder="$profile_folder/.config"
 
     __devenv_plugin__aws__configure "$profile_config_folder"
     __devenv_plugin__email__configure "$profile_config_folder"
+    __devenv_plugin__gpg__configure "$profile_config_folder"
     __devenv_plugin__ssh__configure "$profile_config_folder"
 
     devenv rehash "$profile_name"
