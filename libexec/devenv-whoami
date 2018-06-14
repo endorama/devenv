@@ -11,9 +11,11 @@ active_profile="$(__devenv_profile_get_active)"
 if [[ "$active_profile" != "" ]]; then
   echo "$active_profile"
 else
-  cowsay <<EOF
+  if command -v cowsay > /dev/null 2&>1; then
+    cowsay <<EOF
 "Through others we become ourselves."
 ― Lev S. Vygotsky
 EOF
+  fi
   echo "No profile loaded"
 fi
