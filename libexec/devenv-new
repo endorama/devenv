@@ -41,6 +41,7 @@ source "$_DEVENV_ROOT/libs/profile.sh"
 # Remove the switches we parsed above.
 shift "$((OPTIND - 1))"
 
+[ -z "${1:-}" ] && fatal "profile_name is required"
 profile_name=$1
 profile_folder=$PROFILE_PATHS/$profile_name
 
