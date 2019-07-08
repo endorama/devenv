@@ -1,14 +1,14 @@
 package profile
 
 import (
-	"strings"
 	"context"
 	"fmt"
 	"os"
 	"path/filepath"
-	
-	"github.com/pkg/errors"
+	"strings"
+
 	"github.com/mitchellh/cli"
+	"github.com/pkg/errors"
 )
 
 var (
@@ -16,13 +16,13 @@ var (
 )
 
 type Profile struct {
-	Name string
+	Name     string
 	Location string
-	Plugins []string
-	Shell string
+	Plugins  map[string]bool
+	Shell    string
 
+	runLoader   string
 	shellLoader string
-	runLoader string
 }
 
 func NewProfile(name string) (p *Profile, err error) {
@@ -30,12 +30,12 @@ func NewProfile(name string) (p *Profile, err error) {
 	err = p.GetLocation()
 	fmt.Println(fmt.Sprintf("%v", p))
 
-	p.Plugins = []string{"aws", "bin", "email", "envs", "gpg", "ssh", "shellhistory"}
+	p.Plugins = map[string]bool{}
 	p.Shell = os.Getenv("SHELL")
 
 	p.shellLoader = filepath.Join(p.Location, "load.sh")
 	p.runLoader = filepath.Join(p.Location, "run.sh")
-	
+
 	return p, err
 }
 
@@ -46,14 +46,14 @@ func (p *Profile) GetLocation() error {
 	}
 	profilesDirectory = fmt.Sprintf("%s/profiles", userHome)
 	guessedLocation := filepath.Join(profilesDirectory, p.Name)
-	_, err = os.Stat(guessedLocation);
+	_, err = os.Stat(guessedLocation)
 	if os.IsNotExist(err) {
 		return errors.New(fmt.Sprintf("Profile does not exists at %s", guessedLocation))
 	} else if err != nil {
 		return err
 	}
 	p.Location = guessedLocation
-	
+
 	return nil
 }
 
@@ -72,7 +72,7 @@ func (p Profile) Rehash(ctx context.Context) (err error) {
 		ui.Error(err.Error())
 		return err
 	}
-	
+
 	ui.Info("Generating run file")
 	file, err = p.GenerateRunFile()
 	if err != nil {
@@ -111,16 +111,16 @@ func (p Profile) GenerateRunFile() (b strings.Builder, err error) {
 	if err != nil {
 		return b, errors.Wrap(err, "cannot execute template")
 	}
-	
+
 	return b, nil
 }
 
 func persistFile(path, content string) error {
 	file, err := os.Create(path)
-    if err != nil {
-        return err
-    }
-    defer file.Close()
+	if err != nil {
+		return err
+	}
+	defer file.Close()
 
 	file.WriteString(content)
 	return nil
