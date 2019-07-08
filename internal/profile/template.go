@@ -42,8 +42,6 @@ type RunnerTemplate template.Template
 func templateRenderPlugin(profile Profile, pluginName string) string {
 	var sb strings.Builder
 	switch pluginName {
-	case "bin":
-		sb.WriteString("export PATH=" + profile.Location + "/bin:$PATH\n")
 	case "shell-history":
 		shellName := strings.ToLower(path.Base(profile.Shell))
 		sb.WriteString("export HISTFILE='" + profile.Location + "/" + shellName + "-history'")
