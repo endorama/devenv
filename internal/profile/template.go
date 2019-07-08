@@ -2,8 +2,8 @@ package profile
 
 import (
 	"fmt"
-	"strings"
 	"path"
+	"strings"
 	"text/template"
 )
 
@@ -20,7 +20,7 @@ export DEVENV_ACTIVE_PROFILE_PATH='{{.Location}}'
 # plugin BEGIN ##################
 {{range $key, $value := .Plugins}}{{if $value}}
 # plugin: {{$key}}
-{{renderPlugin $ $key}}{{end}}{{end}}
+{{.Render $}}{{end}}{{end}}
 
 # plugin END ####################`
 

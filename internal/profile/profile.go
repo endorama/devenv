@@ -18,7 +18,7 @@ var (
 type Profile struct {
 	Name     string
 	Location string
-	Plugins  map[string]bool
+	Plugins  map[string]Pluggable
 	Shell    string
 
 	runLoader   string
@@ -30,7 +30,7 @@ func NewProfile(name string) (p *Profile, err error) {
 	err = p.GetLocation()
 	fmt.Println(fmt.Sprintf("%v", p))
 
-	p.Plugins = map[string]bool{}
+	p.Plugins = map[string]Pluggable{}
 	p.Shell = os.Getenv("SHELL")
 
 	p.shellLoader = filepath.Join(p.Location, "load.sh")
@@ -115,9 +115,9 @@ func (p Profile) GenerateRunFile() (b strings.Builder, err error) {
 	return b, nil
 }
 
-func (p *Profile) EnablePlugin(pluginName string) {
-	if p.Plugins[pluginName] == false {
-		p.Plugins[pluginName] = true
+func (p *Profile) EnablePlugin(plugin Pluggable) {
+	if p.Plugins[plugin.Name()] == nil {
+		p.Plugins[plugin.Name()] = plugin
 	}
 }
 
