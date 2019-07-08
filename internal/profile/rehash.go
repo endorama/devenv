@@ -10,7 +10,8 @@ func RehashSingleProfile(ctx context.Context, profileName string) error {
 		return err
 	}
 
-	// profile.EnablePlugin("aws")
+	awsPlugin := NewAwsPlugin()
+	profile.EnablePlugin(awsPlugin)
 	// profile.EnablePlugin("bin")
 	// profile.EnablePlugin("email")
 	// profile.EnablePlugin("envs")

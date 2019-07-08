@@ -42,9 +42,6 @@ type RunnerTemplate template.Template
 func templateRenderPlugin(profile Profile, pluginName string) string {
 	var sb strings.Builder
 	switch pluginName {
-	case "aws":
-		sb.WriteString("export AWS_CONFIG_FILE=" + profile.Location + "/aws/config\n")
-		sb.WriteString("export AWS_SHARED_CREDENTIALS_FILE=" + profile.Location + "/aws/credentials\n")
 	case "bin":
 		sb.WriteString("export PATH=" + profile.Location + "/bin:$PATH\n")
 	case "shell-history":
