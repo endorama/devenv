@@ -115,6 +115,12 @@ func (p Profile) GenerateRunFile() (b strings.Builder, err error) {
 	return b, nil
 }
 
+func (p *Profile) EnablePlugin(pluginName string) {
+	if p.Plugins[pluginName] == false {
+		p.Plugins[pluginName] = true
+	}
+}
+
 func persistFile(path, content string) error {
 	file, err := os.Create(path)
 	if err != nil {
