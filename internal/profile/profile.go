@@ -123,18 +123,25 @@ func (p *Profile) EnablePlugin(plugin Pluggable) {
 	}
 }
 
-func (p *Profile) LoadPluginConfigurations() {
+func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
 	for _, plugin := range p.Plugins {
 		if configurablePlugin, ok := plugin.(Configurable); ok {
-			fmt.Printf("configuring: %s\n", plugin.Name())
+			ui.Info(fmt.Sprintf("configuring: %s", plugin.Name()))
 			err := configurablePlugin.LoadConfig(p.Location)
 			if err != nil {
-				_ = fmt.Errorf("%s", err)
-				continue
+				ui.Error(err.Error())
+				errorOccurred = true
 			}
-			fmt.Printf("%+v\n", configurablePlugin.Config())
+			ui.Info(fmt.Sprintf("%+v\n", configurablePlugin.Config()))
 		}
 	}
+	if errorOccurred {
+		return fmt.Errorf("error occurred loading plugin configuration")
+	}
+	return nil
 }
 
 func persistFile(path, content string) error {

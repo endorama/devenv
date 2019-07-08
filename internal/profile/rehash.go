@@ -16,12 +16,17 @@ func RehashSingleProfile(ctx context.Context, profileName string) error {
 	profile.EnablePlugin(binPlugin)
 	shellHistoryPlugin := NewShellHistoryPlugin()
 	profile.EnablePlugin(shellHistoryPlugin)
-	
+
 	// profile.EnablePlugin("email")
 	// profile.EnablePlugin("envs")
 	// profile.EnablePlugin("gpg")
 	// profile.EnablePlugin("shell-history")
 	// profile.EnablePlugin("ssh")
+
+	err = profile.LoadPluginConfigurations(ctx)
+	if err != nil {
+		return err
+	}
 
 	err = profile.Rehash(ctx)
 	if err != nil {
