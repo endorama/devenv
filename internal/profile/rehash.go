@@ -14,6 +14,8 @@ func RehashSingleProfile(ctx context.Context, profileName string) error {
 	profile.EnablePlugin(awsPlugin)
 	binPlugin := NewBinPlugin()
 	profile.EnablePlugin(binPlugin)
+	shellHistoryPlugin := NewShellHistoryPlugin()
+	profile.EnablePlugin(shellHistoryPlugin)
 	
 	// profile.EnablePlugin("email")
 	// profile.EnablePlugin("envs")

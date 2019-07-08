@@ -2,7 +2,6 @@ package profile
 
 import (
 	"fmt"
-	"path"
 	"strings"
 	"text/template"
 )
@@ -42,9 +41,6 @@ type RunnerTemplate template.Template
 func templateRenderPlugin(profile Profile, pluginName string) string {
 	var sb strings.Builder
 	switch pluginName {
-	case "shell-history":
-		shellName := strings.ToLower(path.Base(profile.Shell))
-		sb.WriteString("export HISTFILE='" + profile.Location + "/" + shellName + "-history'")
 	default:
 		sb.WriteString("__devenv_plugin__" + pluginName + "__generate_loader")
 	}
