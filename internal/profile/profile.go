@@ -123,6 +123,20 @@ func (p *Profile) EnablePlugin(plugin Pluggable) {
 	}
 }
 
+func (p *Profile) LoadPluginConfigurations() {
+	for _, plugin := range p.Plugins {
+		if configurablePlugin, ok := plugin.(Configurable); ok {
+			fmt.Printf("configuring: %s\n", plugin.Name())
+			err := configurablePlugin.LoadConfig(p.Location)
+			if err != nil {
+				_ = fmt.Errorf("%s", err)
+				continue
+			}
+			fmt.Printf("%+v\n", configurablePlugin.Config())
+		}
+	}
+}
+
 func persistFile(path, content string) error {
 	file, err := os.Create(path)
 	if err != nil {
