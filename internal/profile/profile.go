@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"text/template"
 	"strings"
 	"context"
 	"fmt"
@@ -14,34 +13,6 @@ import (
 
 var (
 	profilesDirectory string
-
-	commonTemplate = `
-#!/bin/bash
-#
-# This file has been automatically generated with devenv
-# Please remember that running 'devenv rehash' will overwrite this file :)
-
-export DEVENV_ACTIVE_PROFILE='{{.Name}}'
-export DEVENV_ACTIVE_PROFILE_PATH='{{.Location}}'
-
-# plugin BEGIN ##################
-{{range .Plugins}}
-# plugin: {{.}}
-__devenv_plugin__{{.}}__generate_loader
-{{end}}
-# plugin END ####################`
-	
-	shellLoaderTemplate = fmt.Sprintf(`
-%s
-
-exec {{.Shell}} -l
-`, commonTemplate)
-
-	runTemplate = fmt.Sprintf(`
-%s
-
-eval $@
-`, commonTemplate)
 )
 
 type Profile struct {
@@ -119,8 +90,7 @@ func (p Profile) Rehash(ctx context.Context) (err error) {
 }
 
 func (p Profile) GenerateShellLoadFile() (b strings.Builder, err error) {
-	tmpl, err := template.New("shell-loader").
-		Parse(shellLoaderTemplate)
+	tmpl, err := getShellLoaderTemplate()
 	if err != nil {
 		return b, errors.Wrap(err, "cannot parse template")
 	}
@@ -128,13 +98,12 @@ func (p Profile) GenerateShellLoadFile() (b strings.Builder, err error) {
 	if err != nil {
 		return b, errors.Wrap(err, "cannot execute template")
 	}
-	
+
 	return b, nil
 }
 
 func (p Profile) GenerateRunFile() (b strings.Builder, err error) {
-	tmpl, err := template.New("runner").
-		Parse(runTemplate)
+	tmpl, err := getRunnerTemplate()
 	if err != nil {
 		return b, errors.Wrap(err, "cannot parse template")
 	}
