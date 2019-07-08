@@ -9,6 +9,8 @@ import (
 
 	"github.com/mitchellh/cli"
 	"github.com/pkg/errors"
+
+	"github.com/endorama/devenv/internal/template"
 )
 
 var (
@@ -90,7 +92,7 @@ func (p Profile) Rehash(ctx context.Context) (err error) {
 }
 
 func (p Profile) GenerateShellLoadFile() (b strings.Builder, err error) {
-	tmpl, err := getShellLoaderTemplate()
+	tmpl, err := template.GetShellLoaderTemplate()
 	if err != nil {
 		return b, errors.Wrap(err, "cannot parse template")
 	}
@@ -103,7 +105,7 @@ func (p Profile) GenerateShellLoadFile() (b strings.Builder, err error) {
 }
 
 func (p Profile) GenerateRunFile() (b strings.Builder, err error) {
-	tmpl, err := getRunnerTemplate()
+	tmpl, err := template.GetRunnerTemplate()
 	if err != nil {
 		return b, errors.Wrap(err, "cannot parse template")
 	}
