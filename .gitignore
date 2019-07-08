@@ -1,2 +1,5 @@
+# golang
 devenv
 vendor/
+# editor
+.vscode
