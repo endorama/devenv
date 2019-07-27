@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"path"
 	"strings"
 	"text/template"
@@ -93,4 +94,60 @@ func (p *SSHPlugin) LoadConfig(profileLocation string) error {
 		return errors.Wrap(err, "(ssh) cannot unmarshal config file")
 	}
 	return nil
+}
+
+func (p *SSHPlugin) Generate(profile Profile) error {
+	sshPluginFolder := path.Join(profile.Location, p.Name())
+
+	ssh := strings.Builder{}
+	ssh.WriteString("exec /usr/bin/ssh ")
+
+	scp := strings.Builder{}
+	scp.WriteString("exec /usr/bin/scp ")
+
+	knownHostsFile := path.Join(sshPluginFolder, "known_hosts")
+	ok, err := exists(knownHostsFile)
+	if ok {
+		knownHostsOption := fmt.Sprintf("-o UserKnownHostsFile=%s ", knownHostsFile)
+		ssh.WriteString(knownHostsOption)
+		scp.WriteString(knownHostsOption)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	configFile := path.Join(sshPluginFolder, "config")
+	ok, err = exists(configFile)
+	if ok {
+		configOption := fmt.Sprintf("-F %s ", configFile)
+		ssh.WriteString(configOption)
+		scp.WriteString(configOption)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ssh.WriteString("$@")
+	scp.WriteString("$@")
+
+	sshBinFilePath := path.Join(profile.Location, "bin", "ssh")
+	persistFile(sshBinFilePath, ssh.String())
+	os.Chmod(sshBinFilePath, 0700)
+
+	scpBinFilePath := path.Join(profile.Location, "bin", "scp")
+	persistFile(scpBinFilePath, scp.String())
+	os.Chmod(scpBinFilePath, 0700)
+
+	return nil
+}
+
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return true, err
 }
