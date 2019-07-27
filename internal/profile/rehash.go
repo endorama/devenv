@@ -21,8 +21,8 @@ func RehashSingleProfile(ctx context.Context, profileName string) error {
 	envsPlugin := NewEnvsPlugin()
 	profile.EnablePlugin(envsPlugin)
 	// profile.EnablePlugin("gpg")
-	// profile.EnablePlugin("shell-history")
-	// profile.EnablePlugin("ssh")
+	sshPlugin := NewSSHPlugin()
+	profile.EnablePlugin(sshPlugin)
 
 	err = profile.LoadPluginConfigurations(ctx)
 	if err != nil {
