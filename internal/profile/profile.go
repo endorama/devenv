@@ -144,6 +144,26 @@ func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
 	return nil
 }
 
+func (p *Profile) RunPluginGeneration(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if generatorPlugin, ok := plugin.(Generator); ok {
+			ui.Info(fmt.Sprintf("perform generation: %s", plugin.Name()))
+			err := generatorPlugin.Generate(*p)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+		}
+	}
+	if errorOccurred {
+		return fmt.Errorf("error occurred running plugin generation")
+	}
+	return nil
+}
+
 func persistFile(path, content string) error {
 	file, err := os.Create(path)
 	if err != nil {

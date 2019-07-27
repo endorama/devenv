@@ -5,6 +5,11 @@ type Pluggable interface {
 	Render(profile Profile) string
 }
 
+// Generator interface allow a plugin to generate content before rendering
+type Generator interface {
+	Generate(profile Profile) error
+}
+
 // Configurable interface allow a plugin to load configuration from the profile
 // folder
 type Configurable interface {

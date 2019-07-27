@@ -28,6 +28,10 @@ func RehashSingleProfile(ctx context.Context, profileName string) error {
 	if err != nil {
 		return err
 	}
+	err = profile.RunPluginGeneration(ctx)
+	if err != nil {
+		return err
+	}
 
 	err = profile.Rehash(ctx)
 	if err != nil {
