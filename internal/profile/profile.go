@@ -1,6 +1,8 @@
 package profile
 
 import (
+	"strings"
+	"context"
 	"github.com/endorama/devenv/internal/profile/template"
 )
 
