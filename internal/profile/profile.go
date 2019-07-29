@@ -164,6 +164,46 @@ func (p *Profile) RunPluginGeneration(ctx context.Context) error {
 	return nil
 }
 
+func (p Profile) Setup(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+
+	ui.Info(fmt.Sprintf("Creating profile folder: %s", p.Location))
+
+	ok, err := exists(p.Location)
+	if !ok {
+		os.MkdirAll(p.Location, os.ModeDir)
+	}
+	if err != nil {
+		return errors.Wrap(err, "profile folder creation failed")
+	}
+
+	err = p.RunPluginSetup(ctx)
+	if err != nil {
+		return errors.Wrap(err, "error during plugin setup")
+	}
+	return nil
+}
+
+func (p Profile) RunPluginSetup(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if setuppablePlugin, ok := plugin.(Setuppable); ok {
+			ui.Info(fmt.Sprintf("perform setup: %s", plugin.Name()))
+			err := setuppablePlugin.Setup(p)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+		}
+	}
+	if errorOccurred {
+		return errors.New("plugin setup failed")
+	}
+	return nil
+}
+
 func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
