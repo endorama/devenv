@@ -1,5 +1,9 @@
 package profile
 
+import (
+	"github.com/endorama/devenv/internal/profile/template"
+)
+
 const (
 	profilesDirectory   = "profiles"
 	shellLoaderFilename = "load.sh"
@@ -55,4 +59,28 @@ func (p *Profile) dnablePlugin(plugin Pluggable) {
 	if p.Plugins[plugin.Name()] != nil {
 		p.Plugins[plugin.Name()] = nil
 	}
+}
+
+// GenerateShellLoadFile generate profile shell loader file
+func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+
+	sb := strings.Builder{}
+
+	ui.Info("Generating shell load file")
+	tmpl, err := template.GetShellLoaderTemplate()
+	if err != nil {
+		return errors.Wrap(err, "cannot parse shell loader template")
+	}
+	err = tmpl.Execute(&sb, p)
+	if err != nil {
+		return errors.Wrap(err, "cannot execute shell loader template")
+	}
+	ui.Info("Save shell load file")
+	err = persistFile(p.shellLoader, file.String())
+	if err != nil {
+		return errors.Wrap(err, "cannot save shell loader")
+	}
+
+	return nil
 }
