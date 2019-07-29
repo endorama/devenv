@@ -25,3 +25,8 @@ type Configurable interface {
 	ConfigFile(profileLocation string) string
 	LoadConfig(profileLocation string) error
 }
+
+// Generator interface allow a plugin to generate content before rendering
+type Generator interface {
+	Generate(profile Profile) error
+}

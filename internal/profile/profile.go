@@ -129,3 +129,24 @@ func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
 	}
 	return nil
 }
+
+// RunPluginGeneration run each Generator plugin generation
+func (p *Profile) RunPluginGeneration(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if generatorPlugin, ok := plugin.(Generator); ok {
+			ui.Info(fmt.Sprintf("perform generation: %s", plugin.Name()))
+			err := generatorPlugin.Generate(*p)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+		}
+	}
+	if errorOccurred {
+		return errors.New("error occurred running plugin generation")
+	}
+	return nil
+}
