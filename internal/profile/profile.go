@@ -1,9 +1,10 @@
 package profile
 
 import (
-	"strings"
 	"context"
-	
+	"fmt"
+	"strings"
+
 	"github.com/mitchellh/cli"
 	"github.com/pkg/errors"
 
@@ -88,5 +89,69 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 		return errors.Wrap(err, "cannot save shell loader")
 	}
 
+	return nil
+}
+
+// SetupPlugins run Setuppable plugins Setup
+func (p Profile) SetupPlugins(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if setuppablePlugin, ok := plugin.(Setuppable); ok {
+			ui.Info(fmt.Sprintf("perform setup: %s", plugin.Name()))
+			err := setuppablePlugin.Setup(p)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+		}
+	}
+	if errorOccurred {
+		return errors.New("plugin setup failed")
+	}
+	return nil
+}
+
+// LoadPluginConfigurations load each Configurable plugin configuration
+func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if configurablePlugin, ok := plugin.(Configurable); ok {
+			ui.Info(fmt.Sprintf("configuring: %s", plugin.Name()))
+			err := configurablePlugin.LoadConfig(p.Location)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+			ui.Info(fmt.Sprintf("%+v\n", configurablePlugin.Config()))
+		}
+	}
+	if errorOccurred {
+		return errors.New("error occurred loading plugin configuration")
+	}
+	return nil
+}
+
+// RunPluginGeneration run each Generator plugin generation
+func (p *Profile) RunPluginGeneration(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if generatorPlugin, ok := plugin.(Generator); ok {
+			ui.Info(fmt.Sprintf("perform generation: %s", plugin.Name()))
+			err := generatorPlugin.Generate(*p)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+		}
+	}
+	if errorOccurred {
+		return errors.New("error occurred running plugin generation")
+	}
 	return nil
 }

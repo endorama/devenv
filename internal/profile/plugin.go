@@ -12,3 +12,8 @@ type Pluggable interface {
 type Renderable interface {
 	Render(profile Profile) string
 }
+
+// Setuppable interface allow a plugin to perform setup steps before rendering
+type Setuppable interface {
+	Setup(profile Profile) error
+}
