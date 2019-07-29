@@ -4,4 +4,11 @@ package profile
 // Is the common interface implemented by all plugins
 type Pluggable interface {
 	Name() string
+	Renderable
+}
+
+// Renderable interface allow a plugin to render content in the shell loader
+// and runner files
+type Renderable interface {
+	Render(profile Profile) string
 }
