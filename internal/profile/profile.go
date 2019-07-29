@@ -1,9 +1,10 @@
 package profile
 
 import (
-	"strings"
 	"context"
-	
+	"fmt"
+	"strings"
+
 	"github.com/mitchellh/cli"
 	"github.com/pkg/errors"
 
