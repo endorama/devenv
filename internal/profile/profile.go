@@ -164,6 +164,17 @@ func (p *Profile) RunPluginGeneration(ctx context.Context) error {
 	return nil
 }
 
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return true, err
+}
+
 func persistFile(path, content string) error {
 	file, err := os.Create(path)
 	if err != nil {

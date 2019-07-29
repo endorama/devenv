@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"path"
 	"strings"
 	"text/template"
@@ -139,15 +138,4 @@ func (p *SSHPlugin) Generate(profile Profile) error {
 	os.Chmod(scpBinFilePath, 0700)
 
 	return nil
-}
-
-func exists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return true, err
 }
