@@ -11,7 +11,7 @@ import (
 // New creates a new Profile instance with appropriate configurations
 func New(ctx context.Context, name string) (p *Profile, err error) {
 	p = &Profile{Name: name}
-	loc, err := getProfileLocation(p)
+	loc, err := getProfileLocation(*p)
 	if err != nil {
 		return p, errors.Wrap(err, "cannot get profile location")
 	}
