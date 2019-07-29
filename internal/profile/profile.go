@@ -3,6 +3,10 @@ package profile
 import (
 	"strings"
 	"context"
+	
+	"github.com/mitchellh/cli"
+	"github.com/pkg/errors"
+
 	"github.com/endorama/devenv/internal/profile/template"
 )
 
@@ -79,7 +83,7 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 		return errors.Wrap(err, "cannot execute shell loader template")
 	}
 	ui.Info("Save shell load file")
-	err = persistFile(p.shellLoader, file.String())
+	err = persistFile(p.shellLoaderPath, sb.String())
 	if err != nil {
 		return errors.Wrap(err, "cannot save shell loader")
 	}
