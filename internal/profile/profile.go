@@ -35,3 +35,24 @@ func (p Profile) Exists() bool {
 	}
 	return ok
 }
+
+// LoadPlugins load profile plugins
+func (p Profile) LoadPlugins() {
+	// due to golang working, it's far easier to initialize plugins one by one
+	// and then enabling then individually than trying to load them
+	// dinamically
+	// dummyPlugin := NewDummyPlugin()
+	// p.enablePlugin(dummyPlugin)
+}
+
+func (p *Profile) enablePlugin(plugin Pluggable) {
+	if p.Plugins[plugin.Name()] == nil {
+		p.Plugins[plugin.Name()] = plugin
+	}
+}
+
+func (p *Profile) dnablePlugin(plugin Pluggable) {
+	if p.Plugins[plugin.Name()] != nil {
+		p.Plugins[plugin.Name()] = nil
+	}
+}
