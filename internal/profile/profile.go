@@ -84,3 +84,24 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 
 	return nil
 }
+
+// SetupPlugins run Setuppable plugins Setup
+func (p Profile) SetupPlugins(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if setuppablePlugin, ok := plugin.(Setuppable); ok {
+			ui.Info(fmt.Sprintf("perform setup: %s", plugin.Name()))
+			err := setuppablePlugin.Setup(p)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+		}
+	}
+	if errorOccurred {
+		return errors.New("plugin setup failed")
+	}
+	return nil
+}
