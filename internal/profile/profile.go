@@ -107,3 +107,25 @@ func (p Profile) SetupPlugins(ctx context.Context) error {
 	}
 	return nil
 }
+
+// LoadPluginConfigurations load each Configurable plugin configuration
+func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+	errorOccurred := false
+
+	for _, plugin := range p.Plugins {
+		if configurablePlugin, ok := plugin.(Configurable); ok {
+			ui.Info(fmt.Sprintf("configuring: %s", plugin.Name()))
+			err := configurablePlugin.LoadConfig(p.Location)
+			if err != nil {
+				ui.Error(err.Error())
+				errorOccurred = true
+			}
+			ui.Info(fmt.Sprintf("%+v\n", configurablePlugin.Config()))
+		}
+	}
+	if errorOccurred {
+		return errors.New("error occurred loading plugin configuration")
+	}
+	return nil
+}

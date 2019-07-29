@@ -17,3 +17,11 @@ type Renderable interface {
 type Setuppable interface {
 	Setup(profile Profile) error
 }
+
+// Configurable interface allow a plugin to load configuration from the profile
+// folder
+type Configurable interface {
+	Config() interface{}
+	ConfigFile(profileLocation string) string
+	LoadConfig(profileLocation string) error
+}
