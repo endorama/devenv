@@ -3,6 +3,7 @@ package profile
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/mitchellh/cli"
@@ -45,6 +46,23 @@ func (p Profile) Exists() bool {
 		return false
 	}
 	return ok
+}
+
+// Setup creates profile
+func (p Profile) Create(ctx context.Context) error {
+	ui := ctx.Value("ui").(*cli.BasicUi)
+
+	ui.Info(fmt.Sprintf("Creating profile folder: %s", p.Location))
+
+	ok, err := exists(p.Location)
+	if !ok {
+		os.MkdirAll(p.Location, os.ModeDir)
+	}
+	if err != nil {
+		return errors.Wrap(err, "profile folder creation failed")
+	}
+
+	return nil
 }
 
 // LoadPlugins load profile plugins
