@@ -3,6 +3,7 @@ package profile
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/mitchellh/cli"
@@ -88,6 +89,8 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "cannot save shell loader")
 	}
+	ui.Info("Making shell load file executable")
+	os.Chmod(p.ShellLoaderPath, 0700)
 
 	return nil
 }
