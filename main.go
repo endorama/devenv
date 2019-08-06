@@ -33,6 +33,11 @@ func main() {
 			UI: &commonUI,
 		}, nil
 	}
+	c.Commands["shell"] = func() (cli.Command, error) {
+		return &command.Shell{
+			UI: &commonUI,
+		}, nil
+	}
 
 	exitStatus, err := c.Run()
 	if err != nil {
