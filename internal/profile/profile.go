@@ -28,10 +28,10 @@ type Profile struct {
 	// Shell is the shell to be used by profile
 	Shell string
 
-	// runLoaderPath is the path to be used for the profile run script
-	runLoaderPath string
-	// shellLoaderPath is the path to be used for the profile load script
-	shellLoaderPath string
+	// RunLoaderPath is the path to be used for the profile run script
+	RunLoaderPath string
+	// ShellLoaderPath is the path to be used for the profile load script
+	ShellLoaderPath string
 }
 
 // Exists return where the profile exists
@@ -84,7 +84,7 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 		return errors.Wrap(err, "cannot execute shell loader template")
 	}
 	ui.Info("Save shell load file")
-	err = persistFile(p.shellLoaderPath, sb.String())
+	err = persistFile(p.ShellLoaderPath, sb.String())
 	if err != nil {
 		return errors.Wrap(err, "cannot save shell loader")
 	}

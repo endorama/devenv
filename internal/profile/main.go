@@ -24,8 +24,8 @@ func New(ctx context.Context, name string) (p *Profile, err error) {
 	p.Plugins = make(map[string]Pluggable)
 	p.Shell = os.Getenv("SHELL")
 
-	p.runLoaderPath = filepath.Join(p.Location, shellRunnerFilename)
-	p.shellLoaderPath = filepath.Join(p.Location, shellLoaderFilename)
+	p.RunLoaderPath = filepath.Join(p.Location, shellRunnerFilename)
+	p.ShellLoaderPath = filepath.Join(p.Location, shellLoaderFilename)
 
 	return p, err
 }
