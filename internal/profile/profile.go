@@ -74,6 +74,9 @@ func (p Profile) LoadPlugins() {
 		case plugins.EmailPluginName:
 			plugin := plugins.NewEmailPlugin()
 			p.enablePlugin(plugin)
+		case plugins.EnvsPluginName:
+			plugin := plugins.NewEnvsPlugin()
+			p.enablePlugin(plugin)
 		default:
 			continue
 		}
