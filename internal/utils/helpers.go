@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-func exists(path string) (bool, error) {
+func Exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
 		return true, nil
@@ -15,7 +15,7 @@ func exists(path string) (bool, error) {
 	return true, err
 }
 
-func persistFile(path, content string) error {
+func PersistFile(path, content string) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err

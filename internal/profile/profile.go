@@ -11,6 +11,7 @@ import (
 	"github.com/pkg/errors"
 	
 	plugins "github.com/endorama/devenv/internal/plugins"
+	utils "github.com/endorama/devenv/internal/utils"
 	"github.com/endorama/devenv/internal/profile/template"
 )
 
@@ -46,7 +47,7 @@ func (p Profile) Exists() bool {
 	if p.Location == "" {
 		return false
 	}
-	ok, err := exists(p.Location)
+	ok, err := utils.Exists(p.Location)
 	if err != nil {
 		return false
 	}
@@ -114,7 +115,7 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 		return errors.Wrap(err, "cannot execute shell loader template")
 	}
 	ui.Info("Save shell load file")
-	err = persistFile(p.ShellLoaderPath, sb.String())
+	err = utils.PersistFile(p.ShellLoaderPath, sb.String())
 	if err != nil {
 		return errors.Wrap(err, "cannot save shell loader")
 	}
