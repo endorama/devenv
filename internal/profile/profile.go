@@ -81,6 +81,9 @@ func (p Profile) LoadPlugins() {
 		case plugins.EnvsPluginName:
 			plugin := plugins.NewEnvsPlugin()
 			p.enablePlugin(plugin)
+		case plugins.ShellHistoryPluginName:
+			plugin := plugins.NewShellHistoryPlugin()
+			p.enablePlugin(plugin)
 		case plugins.SSHPluginName:
 			plugin := plugins.NewSSHPlugin()
 			p.enablePlugin(plugin)
