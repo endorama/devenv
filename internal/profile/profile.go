@@ -72,6 +72,9 @@ func (p Profile) LoadPlugins() {
 	// overengineer this part.
 	for _, pluginName := range p.Config.Plugins {
 		switch pluginName {
+		case plugins.AwsPluginName:
+			plugin := plugins.NewAwsPlugin()
+			p.enablePlugin(plugin)
 		case plugins.BinPluginName:
 			plugin := plugins.NewBinPlugin()
 			p.enablePlugin(plugin)
