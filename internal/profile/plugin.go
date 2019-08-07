@@ -10,12 +10,12 @@ type Pluggable interface {
 // Renderable interface allow a plugin to render content in the shell loader
 // and runner files
 type Renderable interface {
-	Render(profile Profile) string
+	Render(profileName, profileLocation string) string
 }
 
 // Setuppable interface allow a plugin to perform setup steps before rendering
 type Setuppable interface {
-	Setup(profile Profile) error
+	Setup(profileLocation string) error
 }
 
 // Configurable interface allow a plugin to load configuration from the profile
@@ -28,5 +28,5 @@ type Configurable interface {
 
 // Generator interface allow a plugin to generate content before rendering
 type Generator interface {
-	Generate(profile Profile) error
+	Generate(profileLocation string) error
 }

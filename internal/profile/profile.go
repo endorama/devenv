@@ -116,7 +116,7 @@ func (p Profile) SetupPlugins(ctx context.Context) error {
 	for _, plugin := range p.Plugins {
 		if setuppablePlugin, ok := plugin.(Setuppable); ok {
 			ui.Info(fmt.Sprintf("perform setup: %s", plugin.Name()))
-			err := setuppablePlugin.Setup(p)
+			err := setuppablePlugin.Setup(p.Location)
 			if err != nil {
 				ui.Error(err.Error())
 				errorOccurred = true
@@ -159,7 +159,7 @@ func (p *Profile) RunPluginGeneration(ctx context.Context) error {
 	for _, plugin := range p.Plugins {
 		if generatorPlugin, ok := plugin.(Generator); ok {
 			ui.Info(fmt.Sprintf("perform generation: %s", plugin.Name()))
-			err := generatorPlugin.Generate(*p)
+			err := generatorPlugin.Generate(p.Location)
 			if err != nil {
 				ui.Error(err.Error())
 				errorOccurred = true

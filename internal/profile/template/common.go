@@ -12,7 +12,7 @@ export DEVENV_ACTIVE_PROFILE_PATH='{{.Location}}'
 # plugin BEGIN ##################
 {{range $key, $value := .Plugins}}{{if $value}}
 # plugin: {{$key}}
-{{.Render $}}{{end}}{{end}}
+{{.Render $.Name $.Location}}{{end}}{{end}}
 
 # plugin END ####################`
 )
