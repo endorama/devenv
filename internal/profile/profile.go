@@ -6,10 +6,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
+	
 	"github.com/mitchellh/cli"
 	"github.com/pkg/errors"
-
+	
+	plugins "github.com/endorama/devenv/internal/plugins"
 	"github.com/endorama/devenv/internal/profile/template"
 )
 
@@ -63,11 +64,20 @@ func (p *Profile) LoadConfig() error {
 
 // LoadPlugins load profile plugins
 func (p Profile) LoadPlugins() {
-	// due to golang working, it's far easier to initialize plugins one by one
-	// and then enabling then individually than trying to load them
-	// dinamically
-	// dummyPlugin := NewDummyPlugin()
-	// p.enablePlugin(dummyPlugin)
+	// We use a switch case to instantiate "statically" plugins to allow
+	// enabling them.
+	// This requires adding plugin here to allow devenv to be able to use them.
+	// It's a compromise to avoid reflection, which at this moment I feel would
+	// overengineer this part.
+	for _, pluginName := range p.Config.Plugins {
+		switch pluginName {
+		case plugins.EmailPluginName:
+			plugin := plugins.NewEmailPlugin()
+			p.enablePlugin(plugin)
+		default:
+			continue
+		}
+	}
 }
 
 func (p *Profile) enablePlugin(plugin Pluggable) {
