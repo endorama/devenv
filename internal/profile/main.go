@@ -10,7 +10,7 @@ import (
 
 // New creates a new Profile instance with appropriate configurations
 func New(ctx context.Context, name string) (p *Profile, err error) {
-	p = &Profile{Name: name}
+	p = &Profile{Name: name, Config: ProfileConfig{}}
 	loc, err := getProfileLocation(*p)
 	if err != nil {
 		return p, errors.Wrap(err, "cannot get profile location")
@@ -20,6 +20,8 @@ func New(ctx context.Context, name string) (p *Profile, err error) {
 	if !p.Exists() {
 		return p, errors.New("profile does not exists")
 	}
+
+	p.LoadConfig()
 
 	p.Plugins = make(map[string]Pluggable)
 	p.Shell = os.Getenv("SHELL")

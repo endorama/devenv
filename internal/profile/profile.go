@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/mitchellh/cli"
@@ -29,6 +30,9 @@ type Profile struct {
 	// Shell is the shell to be used by profile
 	Shell string
 
+	// Config contains profile specific configurations
+	Config ProfileConfig
+
 	// RunLoaderPath is the path to be used for the profile run script
 	RunLoaderPath string
 	// ShellLoaderPath is the path to be used for the profile load script
@@ -46,6 +50,15 @@ func (p Profile) Exists() bool {
 		return false
 	}
 	return ok
+}
+
+func (p *Profile) LoadConfig() error {
+	configFile := filepath.Join(p.Location, "config.yaml")
+	err := p.Config.LoadFromFile(configFile)
+	if err != nil {
+		return errors.Wrap(err, "cannot load config from profile configuration file")
+	}
+	return nil
 }
 
 // LoadPlugins load profile plugins
