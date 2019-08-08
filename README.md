@@ -64,6 +64,10 @@ brew install devenv
 
 Go to the [Release](https://github.com/endorama/devenv/releases) page and grab latest version.
 
+## Old version
+
+The old bash version is in branch `v0`, and latest releases is 0.2.1.
+
 ## License
 
 Copyright 2019 - Edoardo Tenani <[@endorama][github]> <[@edoardotenani][twitter]>
