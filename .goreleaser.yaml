@@ -1,0 +1,74 @@
+before:
+  # Templates for the commands to be ran.
+  hooks:
+  - go mod vendor
+
+checksum:
+  name_template: '{{ .Tag }}-{{ time "20060102" }}-checksums.txt'
+
+# signs:
+#   - artifacts: checksum
+#     cmd: gpg2
+#     args: ["-u", "edoardo.tenani@protonmail.com", "--output", "${signature}", "${artifact}"]
+
+snapshot:
+  name_template: '{{ .Tag }}-{{ time "20060102" }}'
+
+release:
+  prerelease: auto
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^[skip changelog]'
+
+# We have multiple builds in order to fine tune cross compilations.
+builds:
+  # -
+  #   # OSX
+  #   id: devenv_osx
+  #   binary: devenv
+  #   env:
+  #     - CGO_ENABLED=1
+  #     - CXXFLAGS="-mmacosx-version-min=10.10"
+  #     - CC=/usr/x86_64-apple-darwin14/bin/cc
+  #   goos:
+  #     - darwin
+  #   goarch:
+  #     - amd64
+  #   ldflags:
+  #     - -s -w -X github.com/endorama/devenv/version.versionString={{.Tag}} -X github.com/endorama/devenv/version.commit=={{ .ShortCommit }}
+  - # All the other platforms
+    id: devenv
+    binary: devenv
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w -X github.com/endorama/devenv/internal/version.version={{.Tag}} -X github.com/endorama/devenv/internal/version.commit={{.ShortCommit}}
+      - "-extldflags '-static'"
+
+archives:
+  -
+    id: "devenv"
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    replacements:
+      amd64: 64bit
+      darwin: macOS
+      386: 32bit
+      arm: ARM
+      arm64: ARM64
+      linux: Linux
+      windows: Windows
+    files:
+      - README.md
+      - LICENSE
