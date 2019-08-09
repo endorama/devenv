@@ -7,18 +7,15 @@ import (
 	"github.com/mitchellh/cli"
 
 	"github.com/endorama/devenv/command"
+	"github.com/endorama/devenv/internal/version"
 )
 
 const (
 	app = "devenv"
 )
 
-var (
-	version = "0.1.0"
-)
-
 func main() {
-	c := cli.NewCLI(app, version)
+	c := cli.NewCLI(app, version.Version())
 	c.Args = os.Args[1:]
 	c.Commands = map[string]cli.CommandFactory{}
 
