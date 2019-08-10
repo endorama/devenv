@@ -101,7 +101,7 @@ func (p *Profile) enablePlugin(plugin Pluggable) {
 	}
 }
 
-func (p *Profile) dnablePlugin(plugin Pluggable) {
+func (p *Profile) disablePlugin(plugin Pluggable) {
 	if p.Plugins[plugin.Name()] != nil {
 		p.Plugins[plugin.Name()] = nil
 	}
