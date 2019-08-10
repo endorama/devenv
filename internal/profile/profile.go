@@ -124,7 +124,7 @@ export DEVENV_ACTIVE_PROFILE_PATH='%s'
 
 	sb.WriteString("# plugins BEGIN ##################\n")
 	for _, plugin := range p.Plugins {
-		ui.Info(fmt.Sprintf("Rendering plugin: %s", plugin.Name()))
+		ui.Info(fmt.Sprintf("rendering plugin: %s", plugin.Name()))
 		sb.WriteString(fmt.Sprintf("# plugin %s\n", plugin.Name()))
 		sb.WriteString(plugin.Render(p.Name, p.Location))
 	}
