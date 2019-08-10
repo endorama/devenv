@@ -178,7 +178,7 @@ func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
 				ui.Error(err.Error())
 				errorOccurred = true
 			}
-			ui.Info(fmt.Sprintf("%+v\n", configurablePlugin.Config()))
+			ui.Info(fmt.Sprintf("  %+v\n", configurablePlugin.Config()))
 		}
 	}
 	if errorOccurred {

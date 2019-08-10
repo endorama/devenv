@@ -43,7 +43,7 @@ func (cmd Rehash) Run(args []string) int {
 		cmd.UI.Info("Rehashing all profiles")
 		// err = profile.RehashAllProfiles(context.TODO())
 	case len(args) == 1:
-		cmd.UI.Info(fmt.Sprintf("Rehashing %s", args[0]))
+		cmd.UI.Info(fmt.Sprintf("Rehashing profile: %s", args[0]))
 		err = profile.RehashSingle(ctx, args[0])
 	case len(args) > 1:
 		cmd.UI.Info(fmt.Sprintf("Rehashing multiple profiles: %s", strings.Join(args, ", ")))
