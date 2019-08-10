@@ -6,13 +6,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	
+
 	"github.com/mitchellh/cli"
 	"github.com/pkg/errors"
-	
+
 	plugins "github.com/endorama/devenv/internal/plugins"
 	utils "github.com/endorama/devenv/internal/utils"
-	"github.com/endorama/devenv/internal/profile/template"
 )
 
 const (
@@ -114,20 +113,31 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 
 	sb := strings.Builder{}
 
-	ui.Info("Generating shell load file")
-	tmpl, err := template.GetShellLoaderTemplate()
-	if err != nil {
-		return errors.Wrap(err, "cannot parse shell loader template")
+	sb.WriteString(fmt.Sprintf(`#!/bin/bash
+#
+# This file has been automatically generated with devenv
+# Please remember that running 'devenv rehash' will overwrite this file :)
+
+export DEVENV_ACTIVE_PROFILE='%s'
+export DEVENV_ACTIVE_PROFILE_PATH='%s'
+`, p.Name, p.Location))
+
+	sb.WriteString("# plugins BEGIN ##################\n")
+	for _, plugin := range p.Plugins {
+		ui.Info(fmt.Sprintf("Rendering plugin: %s", plugin.Name()))
+		sb.WriteString(fmt.Sprintf("# plugin %s\n", plugin.Name()))
+		sb.WriteString(plugin.Render(p.Name, p.Location))
 	}
-	err = tmpl.Execute(&sb, p)
-	if err != nil {
-		return errors.Wrap(err, "cannot execute shell loader template")
-	}
+	sb.WriteString("# plugins END ####################\n")
+
+	sb.WriteString(fmt.Sprintf("\nexec %s -l\n", p.Shell))
+
 	ui.Info("Save shell load file")
-	err = utils.PersistFile(p.ShellLoaderPath, sb.String())
+	err := utils.PersistFile(p.ShellLoaderPath, sb.String())
 	if err != nil {
 		return errors.Wrap(err, "cannot save shell loader")
 	}
+
 	ui.Info("Making shell load file executable")
 	os.Chmod(p.ShellLoaderPath, 0700)
 
