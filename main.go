@@ -25,6 +25,11 @@ func main() {
 		ErrorWriter: os.Stderr,
 	}
 
+	c.Commands["list"] = func() (cli.Command, error) {
+		return &command.List{
+			UI: &commonUI,
+		}, nil
+	}
 	c.Commands["rehash"] = func() (cli.Command, error) {
 		return &command.Rehash{
 			UI: &commonUI,
