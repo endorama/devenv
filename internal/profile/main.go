@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 
 	"github.com/pkg/errors"
+
+	configs "github.com/endorama/devenv/internal/configs"
 )
 
 // New creates a new Profile instance with appropriate configurations
@@ -26,8 +28,8 @@ func New(ctx context.Context, name string) (p *Profile, err error) {
 	p.Plugins = make(map[string]Pluggable)
 	p.Shell = os.Getenv("SHELL")
 
-	p.RunLoaderPath = filepath.Join(p.Location, shellRunnerFilename)
-	p.ShellLoaderPath = filepath.Join(p.Location, shellLoaderFilename)
+	p.RunLoaderPath = filepath.Join(p.Location, configs.ShellRunnerFilename)
+	p.ShellLoaderPath = filepath.Join(p.Location, configs.ShellLoaderFilename)
 
 	return p, err
 }

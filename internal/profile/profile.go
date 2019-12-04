@@ -14,12 +14,6 @@ import (
 	utils "github.com/endorama/devenv/internal/utils"
 )
 
-const (
-	profilesDirectory   = "profiles"
-	shellLoaderFilename = "load.sh"
-	shellRunnerFilename = "run.sh"
-)
-
 // Profile holds information for a single profile
 type Profile struct {
 	// Name of the profile

@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 
 	"github.com/pkg/errors"
+
+	configs "github.com/endorama/devenv/internal/configs"
 )
 
 func getProfileLocation(p Profile) (string, error) {
@@ -13,7 +15,7 @@ func getProfileLocation(p Profile) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	profiles := fmt.Sprintf("%s/%s", userHome, profilesDirectory)
+	profiles := fmt.Sprintf("%s/%s", userHome, configs.ProfilesDirectory)
 	guessedLocation := filepath.Join(profiles, p.Name)
 	_, err = os.Stat(guessedLocation)
 	if os.IsNotExist(err) {
