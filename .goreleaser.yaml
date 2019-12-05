@@ -32,7 +32,6 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
       - darwin
     goarch:
       - amd64
@@ -44,9 +43,6 @@ archives:
   -
     id: "devenv"
     format: tar.gz
-    format_overrides:
-      - goos: windows
-        format: zip
     replacements:
       amd64: 64bit
       darwin: macOS
@@ -54,7 +50,6 @@ archives:
       arm: ARM
       arm64: ARM64
       linux: Linux
-      windows: Windows
     files:
       - README.md
       - LICENSE
