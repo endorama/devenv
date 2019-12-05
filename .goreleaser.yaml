@@ -25,20 +25,6 @@ changelog:
 
 # We have multiple builds in order to fine tune cross compilations.
 builds:
-  # -
-  #   # OSX
-  #   id: devenv_osx
-  #   binary: devenv
-  #   env:
-  #     - CGO_ENABLED=1
-  #     - CXXFLAGS="-mmacosx-version-min=10.10"
-  #     - CC=/usr/x86_64-apple-darwin14/bin/cc
-  #   goos:
-  #     - darwin
-  #   goarch:
-  #     - amd64
-  #   ldflags:
-  #     - -s -w -X github.com/endorama/devenv/version.versionString={{.Tag}} -X github.com/endorama/devenv/version.commit=={{ .ShortCommit }}
   - # All the other platforms
     id: devenv
     binary: devenv
