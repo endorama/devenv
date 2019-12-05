@@ -53,3 +53,11 @@ archives:
     files:
       - README.md
       - LICENSE
+
+brews:
+  - homepage: "https://github.com/endorama/devenv"
+    github:
+      owner: endorama
+      name: homebrew-taps
+    test: |
+      system "#{bin}/devenv --version"
