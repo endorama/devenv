@@ -56,6 +56,8 @@ archives:
 
 brews:
   - homepage: "https://github.com/endorama/devenv"
+    skip_upload: auto
+    folder: Formula
     github:
       owner: endorama
       name: homebrew-taps
