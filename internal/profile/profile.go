@@ -113,9 +113,25 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 # This file has been automatically generated with devenv
 # Please remember that running 'devenv rehash' will overwrite this file :)
 
+if [ "$DEVENV_ACTIVE_PROFILE" != "" ]; then
+	echo "A profile is already loaded ($DEVENV_ACTIVE_PROFILE). Loading a new profile on top may leak credentials."
+	echo "Are you sure you want to continue?"
+	select yn in "Yes" "No"; do
+		case $yn in
+			Yes ) break;;
+			No ) exit;;
+		esac
+	done
+fi
+
+if [ "$DEVENV_ACTIVE_PROFILE" == "%s" ]; then
+	echo "This profile is already loaded, stopping."
+	exit 0
+fi
+
 export DEVENV_ACTIVE_PROFILE='%s'
 export DEVENV_ACTIVE_PROFILE_PATH='%s'
-`, p.Name, p.Location))
+`, p.Name, p.Name, p.Location))
 
 	sb.WriteString("# plugins BEGIN ##################\n")
 	for _, plugin := range p.Plugins {
