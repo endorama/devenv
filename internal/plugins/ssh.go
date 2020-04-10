@@ -1,10 +1,10 @@
 package profile
 
 import (
-	"os"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"path"
 	"strings"
 	"text/template"
@@ -57,8 +57,8 @@ func (p SSHPlugin) Render(profileName, profileLocation string) string {
 
 	t := `# create agent cache if missing
 if [ ! -f {{.CachePath}} ]; then
-	echo $(ssh-agent -s | sed "s/echo/# echo/") > {{.CachePath}}
-	chown $USER:$USER {{.CachePath}}
+	ssh-agent -s | sed "s/echo/# echo/" > {{.CachePath}}
+	chown "$USER:$USER" {{.CachePath}}
 	chmod 600 {{.CachePath}}
 fi
 # load agent
