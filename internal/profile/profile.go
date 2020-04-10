@@ -10,6 +10,7 @@ import (
 	"github.com/mitchellh/cli"
 	"github.com/pkg/errors"
 
+	herectx "github.com/endorama/devenv/internal/context"
 	plugins "github.com/endorama/devenv/internal/plugins"
 	utils "github.com/endorama/devenv/internal/utils"
 )
@@ -103,7 +104,7 @@ func (p *Profile) disablePlugin(plugin Pluggable) {
 
 // GenerateShellLoadFile generate profile shell loader file
 func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
-	ui := ctx.Value("ui").(*cli.BasicUi)
+	ui := ctx.Value(herectx.UI).(*cli.BasicUi)
 
 	sb := strings.Builder{}
 
@@ -140,7 +141,7 @@ export DEVENV_ACTIVE_PROFILE_PATH='%s'
 
 // SetupPlugins run Setuppable plugins Setup
 func (p Profile) SetupPlugins(ctx context.Context) error {
-	ui := ctx.Value("ui").(*cli.BasicUi)
+	ui := ctx.Value(herectx.UI).(*cli.BasicUi)
 	errorOccurred := false
 
 	for _, plugin := range p.Plugins {
@@ -161,7 +162,7 @@ func (p Profile) SetupPlugins(ctx context.Context) error {
 
 // LoadPluginConfigurations load each Configurable plugin configuration
 func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
-	ui := ctx.Value("ui").(*cli.BasicUi)
+	ui := ctx.Value(herectx.UI).(*cli.BasicUi)
 	errorOccurred := false
 
 	for _, plugin := range p.Plugins {
@@ -183,7 +184,7 @@ func (p *Profile) LoadPluginConfigurations(ctx context.Context) error {
 
 // RunPluginGeneration run each Generator plugin generation
 func (p *Profile) RunPluginGeneration(ctx context.Context) error {
-	ui := ctx.Value("ui").(*cli.BasicUi)
+	ui := ctx.Value(herectx.UI).(*cli.BasicUi)
 	errorOccurred := false
 
 	for _, plugin := range p.Plugins {

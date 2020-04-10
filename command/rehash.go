@@ -7,6 +7,7 @@ import (
 
 	"github.com/mitchellh/cli"
 
+	herectx "github.com/endorama/devenv/internal/context"
 	"github.com/endorama/devenv/internal/profile"
 )
 
@@ -36,7 +37,7 @@ func (cmd Rehash) Run(args []string) int {
 	var err error
 	fmt.Println(args)
 
-	ctx := context.WithValue(context.Background(), "ui", cmd.UI)
+	ctx := context.WithValue(context.Background(), herectx.UI, cmd.UI)
 
 	switch {
 	case len(args) == 0:
