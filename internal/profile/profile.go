@@ -84,6 +84,9 @@ func (p Profile) LoadPlugins() {
 		case plugins.SSHPluginName:
 			plugin := plugins.NewSSHPlugin()
 			p.enablePlugin(plugin)
+		case plugins.TmuxPluginName:
+			plugin := plugins.NewTmuxPlugin()
+			p.enablePlugin(plugin)
 		default:
 			continue
 		}
