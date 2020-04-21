@@ -2,6 +2,7 @@ package profile
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -23,7 +24,10 @@ func New(ctx context.Context, name string) (p *Profile, err error) {
 		return p, errors.New("profile does not exists")
 	}
 
-	p.LoadConfig()
+	err = p.LoadConfig()
+	if err != nil {
+		return p, fmt.Errorf("cannot load profile configurations: %w", err)
+	}
 
 	p.Plugins = make(map[string]Pluggable)
 	p.Shell = os.Getenv("SHELL")
