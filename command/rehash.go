@@ -24,7 +24,11 @@ func (cmd Rehash) Synopsis() string {
 func (cmd Rehash) Help() string {
 	return fmt.Sprintf(`%s
 Usage:
+  devenv rehash
+		Rehash all profiles
   devenv rehash [PROFILE_NAME]
+		Rehash a single profile
+	
   devenv rehash -h | --help
 
 Options:
@@ -42,7 +46,7 @@ func (cmd Rehash) Run(args []string) int {
 	switch {
 	case len(args) == 0:
 		cmd.UI.Info("Rehashing all profiles")
-		// err = profile.RehashAllProfiles(context.TODO())
+		err = profile.RehashAllProfiles(ctx)
 	case len(args) == 1:
 		cmd.UI.Info(fmt.Sprintf("Rehashing profile: %s", args[0]))
 		err = profile.RehashSingle(ctx, args[0])

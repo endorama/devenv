@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -25,4 +26,30 @@ func getProfileLocation(p Profile) (string, error) {
 	}
 	return guessedLocation, nil
 
+}
+
+func getProfiles() ([]string, error) {
+	userHome, err := os.UserHomeDir()
+	if err != nil {
+		return []string{}, err
+	}
+
+	profilesDirectory := fmt.Sprintf("%s/%s", userHome, configs.ProfilesDirectory)
+	file, err := os.Open(profilesDirectory)
+	if err != nil {
+		return []string{}, err
+	}
+	names, err := file.Readdirnames(0)
+	if err != nil {
+		return []string{}, err
+	}
+
+	profiles := []string{}
+	for _, name := range names {
+		_, err := New(context.Background(), name)
+		if err == nil {
+			profiles = append(profiles, name)
+		}
+	}
+	return profiles, nil
 }
