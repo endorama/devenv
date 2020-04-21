@@ -3,6 +3,7 @@ package command
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/mitchellh/cli"
@@ -42,6 +43,17 @@ func (cmd Rehash) Run(args []string) int {
 	fmt.Println(args)
 
 	ctx := context.WithValue(context.Background(), herectx.UI, cmd.UI)
+
+	if os.Getenv("DEVENV_ACTIVE_PROFILE") != "" {
+		// NOTE: rehashing when a profile is active is dangerous, as the environment
+		// has been changed with profile customization and there is no guarantee about
+		// what those changes have affected.
+		// This may be especially problematic for executable path detection in
+		// plugin.
+		// As such we prevent rehashing while there is an active profile.
+		cmd.UI.Error("Trying to rehash with an active profile. This may go very wrong.")
+		return 1
+	}
 
 	switch {
 	case len(args) == 0:
