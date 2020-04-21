@@ -88,7 +88,7 @@ func (p Profile) LoadPlugins() {
 			plugin := plugins.NewTmuxPlugin()
 			p.enablePlugin(plugin)
 		default:
-			continue
+			panic(fmt.Sprintf("trying to load unknown plugin: %s", pluginName))
 		}
 	}
 }
