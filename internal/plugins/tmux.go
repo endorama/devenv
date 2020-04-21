@@ -41,7 +41,7 @@ func (p *TmuxPlugin) Generate(profileLocation string) error {
 	tmux.WriteString(systemTmuxPath)
 
 	tmux.WriteString(" -S \"/tmp/devenv_$TMUX_SOCKET_NAME\" ")
-	tmux.WriteString("$@")
+	tmux.WriteString("\"$@\"")
 
 	binFilePath := path.Join(profileLocation, "bin", "tmux")
 	utils.PersistFile(binFilePath, tmux.String())
