@@ -50,6 +50,10 @@ func RehashSingle(ctx context.Context, profileName string) error {
 	if err != nil {
 		return err
 	}
+	err = profile.GenerateRunFile(ctx)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
