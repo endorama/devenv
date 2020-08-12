@@ -111,7 +111,7 @@ func (p Profile) GenerateShellLoadFile(ctx context.Context) error {
 
 	sb := strings.Builder{}
 
-	sb.WriteString(fmt.Sprintf(`#!/bin/bash
+	sb.WriteString(fmt.Sprintf(`#!/usr/bin/env bash
 #
 # This file has been automatically generated with devenv
 # Please remember that running 'devenv rehash' will overwrite this file :)
