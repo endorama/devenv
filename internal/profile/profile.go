@@ -158,6 +158,59 @@ export DEVENV_ACTIVE_PROFILE_PATH='%s'
 	return nil
 }
 
+// GenerateRunFile generate profile run file
+func (p Profile) GenerateRunFile(ctx context.Context) error {
+	ui := ctx.Value(herectx.UI).(*cli.BasicUi)
+
+	sb := strings.Builder{}
+
+	sb.WriteString(fmt.Sprintf(`#!/usr/bin/env bash
+#
+# This file has been automatically generated with devenv
+# Please remember that running 'devenv rehash' will overwrite this file :)
+
+if [ "$DEVENV_ACTIVE_PROFILE" != "" ]; then
+	echo "A profile is already loaded ($DEVENV_ACTIVE_PROFILE). Loading a new profile on top may leak credentials."
+	echo "Are you sure you want to continue?"
+	select yn in "Yes" "No"; do
+		case $yn in
+			Yes ) break;;
+			No ) exit;;
+		esac
+	done
+fi
+
+if [ "$DEVENV_ACTIVE_PROFILE" == "%s" ]; then
+	echo "This profile is already loaded, stopping."
+	exit 0
+fi
+
+export DEVENV_ACTIVE_PROFILE='%s'
+export DEVENV_ACTIVE_PROFILE_PATH='%s'
+`, p.Name, p.Name, p.Location))
+
+	sb.WriteString("# plugins BEGIN ##################\n")
+	for _, plugin := range p.Plugins {
+		ui.Info(fmt.Sprintf("rendering plugin: %s", plugin.Name()))
+		sb.WriteString(fmt.Sprintf("# plugin %s\n", plugin.Name()))
+		sb.WriteString(plugin.Render(p.Name, p.Location))
+	}
+	sb.WriteString("# plugins END ####################\n")
+
+	sb.WriteString("\neval \"$*\"\n")
+
+	ui.Info("Save run load file")
+	err := utils.PersistFile(p.RunLoaderPath, sb.String())
+	if err != nil {
+		return errors.Wrap(err, "cannot save run loader")
+	}
+
+	ui.Info("Making run load file executable")
+	os.Chmod(p.RunLoaderPath, 0700)
+
+	return nil
+}
+
 // SetupPlugins run Setuppable plugins Setup
 func (p Profile) SetupPlugins(ctx context.Context) error {
 	ui := ctx.Value(herectx.UI).(*cli.BasicUi)

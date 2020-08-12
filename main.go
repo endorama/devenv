@@ -35,6 +35,11 @@ func main() {
 			UI: &commonUI,
 		}, nil
 	}
+	c.Commands["run"] = func() (cli.Command, error) {
+		return &command.Run{
+			UI: &commonUI,
+		}, nil
+	}
 	c.Commands["shell"] = func() (cli.Command, error) {
 		return &command.Shell{
 			UI: &commonUI,
