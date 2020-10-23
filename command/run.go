@@ -48,7 +48,7 @@ func (cmd Run) Run(args []string) int {
 	}
 
 	profileName := args[0]
-	commandString := strings.Join(args[1:len(args)], " ")
+	commandString := strings.Join(args[1:], " ")
 
 	cmd.UI.Info(fmt.Sprintf("running in profile: %s", profileName))
 
@@ -60,7 +60,7 @@ func (cmd Run) Run(args []string) int {
 
 	cmd.UI.Info(fmt.Sprintf("run load file is: %s", p.RunLoaderPath))
 
-	err = syscall.Exec("/usr/bin/env", 
+	err = syscall.Exec("/usr/bin/env",
 		[]string{"bash", p.RunLoaderPath, commandString},
 		os.Environ())
 	if err != nil {

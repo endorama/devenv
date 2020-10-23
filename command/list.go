@@ -1,8 +1,8 @@
 package command
 
 import (
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -11,6 +11,7 @@ import (
 	configs "github.com/endorama/devenv/internal/configs"
 )
 
+// List is a command to list available profiles
 type List struct {
 	UI cli.Ui
 }
