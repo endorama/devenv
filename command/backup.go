@@ -1,9 +1,12 @@
 package command
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
+	herectx "github.com/endorama/devenv/internal/context"
+	"github.com/endorama/devenv/internal/profile/backup"
 	"github.com/mitchellh/cli"
 )
 
@@ -38,7 +41,7 @@ func (cmd Backup) Run(args []string) int {
 	var err error
 	fmt.Println(args)
 
-	// ctx := context.WithValue(context.Background(), herectx.UI, cmd.UI)
+	ctx := context.WithValue(context.Background(), herectx.UI, cmd.UI)
 
 	switch {
 	case len(args) == 0:
@@ -46,7 +49,7 @@ func (cmd Backup) Run(args []string) int {
 		// err = profile.RehashAllProfiles(ctx)
 	case len(args) == 1:
 		cmd.UI.Info(fmt.Sprintf("Creating backup for profile: %s", args[0]))
-		// err = profile.RehashSingle(ctx, args[0])
+		err = backup.BackupSingle(ctx, args[0])
 	case len(args) > 1:
 		cmd.UI.Info(fmt.Sprintf("Creating backup for multiple profiles: %s", strings.Join(args, ", ")))
 		// err = profile.RehashMUltipleProfiles(context.TODO())
@@ -58,7 +61,5 @@ func (cmd Backup) Run(args []string) int {
 	}
 
 	cmd.UI.Info("Done")
-	return 0
-
 	return 0
 }
