@@ -8,7 +8,11 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 
+	"filippo.io/age"
+
+	petname "github.com/dustinkirkland/golang-petname"
 	"github.com/endorama/devenv/internal/profile"
 )
 
@@ -20,7 +24,10 @@ func BackupSingle(ctx context.Context, profileName string) error {
 	fmt.Println(profile.Name)
 
 	// Files which to include in the tar.gz archive
-	files := []string{"load.sh", "run.sh"}
+	files := []string{
+		path.Join(profile.Location, "load.sh"),
+		path.Join(profile.Location, "run.sh"),
+	}
 
 	// Create output file
 	out, err := os.Create("output.tar.gz")
@@ -37,8 +44,17 @@ func BackupSingle(ctx context.Context, profileName string) error {
 
 	fmt.Println("Archive created successfully")
 
-	// createArchive()
-	// encryptArchive()
+	agein, err := os.Open("output.tar.gz")
+	if err != nil {
+		log.Fatalln("Error writing archive:", err)
+	}
+	ageout, err := os.Create("output.tar.gz.age")
+	if err != nil {
+		log.Fatalln("Error writing archive:", err)
+	}
+	defer agein.Close()
+	defer ageout.Close()
+	encrypt(agein, ageout)
 
 	return nil
 }
@@ -103,4 +119,25 @@ func addToArchive(tw *tar.Writer, filename string) error {
 	}
 
 	return nil
+}
+
+func encrypt(in io.Reader, out io.Writer) {
+	petname.NonDeterministicMode()
+	pass := petname.Generate(6, "-")
+	fmt.Println(pass)
+	r, err := age.NewScryptRecipient(pass)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+
+	w, err := age.Encrypt(out, r)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+	if _, err := io.Copy(w, in); err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+	if err := w.Close(); err != nil {
+		log.Fatalf("Error: %v", err)
+	}
 }

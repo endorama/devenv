@@ -3,6 +3,8 @@ module github.com/endorama/devenv
 go 1.14
 
 require (
+	filippo.io/age v1.0.0-beta5
+	github.com/dustinkirkland/golang-petname v0.0.0-20191129215211-8e5a1ed0cff0
 	github.com/mitchellh/cli v1.0.0
 	github.com/pkg/errors v0.8.1
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
