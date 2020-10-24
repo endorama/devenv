@@ -45,6 +45,11 @@ func main() {
 			UI: &commonUI,
 		}, nil
 	}
+	c.Commands["whoami"] = func() (cli.Command, error) {
+		return &command.Whoami{
+			UI: &commonUI,
+		}, nil
+	}
 
 	exitStatus, err := c.Run()
 	if err != nil {
