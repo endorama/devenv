@@ -274,3 +274,21 @@ func (p *Profile) RunPluginGeneration(ctx context.Context) error {
 	}
 	return nil
 }
+
+func (p *Profile) Files() ([]string, error) {
+	files := []string{}
+	err := filepath.Walk(p.Location,
+		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			if !info.IsDir() {
+				files = append(files, strings.ReplaceAll(path, fmt.Sprintf("%s/", p.Location), ""))
+			}
+			return nil
+		})
+	if err != nil {
+		return files, fmt.Errorf("profile location walk failed: %w", err)
+	}
+	return files, nil
+}
