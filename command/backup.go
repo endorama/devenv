@@ -18,7 +18,7 @@ type Backup struct {
 
 // Synopsis returns short synopsis of the command.
 func (cmd Backup) Synopsis() string {
-	return "Backup all available profiles"
+	return "Create encrypted backup of profiles"
 }
 
 // Help return command help text
