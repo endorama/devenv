@@ -13,6 +13,7 @@ import (
 	"github.com/endorama/devenv/internal/profile"
 )
 
+// Shell is a devenv command for loading shell environments based on profiles
 type Shell struct {
 	UI cli.Ui
 }

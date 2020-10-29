@@ -12,6 +12,7 @@ import (
 	"github.com/endorama/devenv/internal/profile"
 )
 
+// Rehash is a command to rebuild profile static files after profile changes
 type Rehash struct {
 	UI cli.Ui
 }

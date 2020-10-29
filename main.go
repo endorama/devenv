@@ -25,6 +25,11 @@ func main() {
 		ErrorWriter: os.Stderr,
 	}
 
+	c.Commands["backup"] = func() (cli.Command, error) {
+		return &command.Backup{
+			UI: &commonUI,
+		}, nil
+	}
 	c.Commands["list"] = func() (cli.Command, error) {
 		return &command.List{
 			UI: &commonUI,
