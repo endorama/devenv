@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"strings"
 
+	petname "github.com/dustinkirkland/golang-petname"
 	herectx "github.com/endorama/devenv/internal/context"
-	"github.com/endorama/devenv/internal/profile/backup"
+	"github.com/endorama/devenv/internal/profile"
 	"github.com/mitchellh/cli"
 )
 
@@ -23,11 +24,19 @@ func (cmd Backup) Synopsis() string {
 // Help return command help text
 func (cmd Backup) Help() string {
 	return fmt.Sprintf(`%s
+The encryption passphrase is automatically generated using a safe RNG function and printed after backup creation.
+
 Usage:
 	devenv backup
+		(not yet implemented)
 		Backup all profiles
+
 	devenv backup [PROFILE_NAME]
 		Backup a single profile
+
+	devenv backup [PROFILE_NAME...]
+		(not yet implemented)
+		Backup multiple profile
 
 	devenv backup -h | --help
 
@@ -43,13 +52,34 @@ func (cmd Backup) Run(args []string) int {
 
 	ctx := context.WithValue(context.Background(), herectx.UI, cmd.UI)
 
+	petname.NonDeterministicMode()
+	password := petname.Generate(6, "-")
+
 	switch {
 	case len(args) == 0:
 		cmd.UI.Info("Creating backup for all profiles")
 		// err = profile.RehashAllProfiles(ctx)
 	case len(args) == 1:
-		cmd.UI.Info(fmt.Sprintf("Creating backup for profile: %s", args[0]))
-		err = backup.BackupSingle(ctx, args[0])
+		p, err := profile.New(ctx, args[0])
+		if err != nil {
+			cmd.UI.Error(err.Error())
+			return 1
+		}
+		if !p.Exists() {
+			cmd.UI.Error("Specified profile does not exist")
+		}
+		cmd.UI.Info(fmt.Sprintf("Creating backup for profile: %s", p.Name))
+		err = profile.BackupSingle(ctx, p.Name, password)
+		cmd.UI.Info("Included files:")
+		files, err := p.Files()
+		if err != nil {
+			cmd.UI.Error(err.Error())
+			return 1
+		}
+		for _, file := range files {
+			cmd.UI.Info(fmt.Sprintf(" - %s", file))
+		}
+		cmd.UI.Info(fmt.Sprintf("Encryption passphrase is: %s", password))
 	case len(args) > 1:
 		cmd.UI.Info(fmt.Sprintf("Creating backup for multiple profiles: %s", strings.Join(args, ", ")))
 		// err = profile.RehashMUltipleProfiles(context.TODO())
