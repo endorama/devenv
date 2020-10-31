@@ -147,7 +147,7 @@ Additional details about pluing interfaces may be found in the docs.
 
 ## License
 
-Copyright 2019 - Edoardo Tenani ([@endorama][github])
+Copyright 2019-2020 - Edoardo Tenani ([@endorama][github])
 
 Licensed under Mozilla Public License 2.0.
 
